@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <record id="action_stock_receipt_report_xlsx" model="ir.actions.report">
+        <field name="name">Stock Receipt Report Xlsx</field>
+        <field name="model">stock.receipt.report</field>
+        <field name="type">ir.actions.report</field>
+        <field
+            name="report_name"
+        >stock_receipt_report_sbt.stock_receipt_report_xlsx</field>
+        <field name="report_type">xlsx</field>
+        <field name="report_file">stock_receipt_report</field>
+    </record>
+
+</odoo>
