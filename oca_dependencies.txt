@@ -20,4 +20,4 @@
 # sale-workflow https://github.com/OCA/sale-workflow branchname f848e37
 
 sbt-oca https://github.com/qrtl/sbt-oca.git 12.0
-sbtechnology https://github.com/qrtl/sbtechnology.git 12.0
+sbtechnology https://github.com/qrtl/sbtechnology.git master
