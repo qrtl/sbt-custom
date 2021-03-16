@@ -1,0 +1,81 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* stock_report_common_sbt
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 12.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-12-30 06:19+0000\n"
+"PO-Revision-Date: 2020-12-30 06:19+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: stock_report_common_sbt
+#: model:ir.model.fields,field_description:stock_report_common_sbt.field_stock_report_common_mixin__create_uid
+msgid "Created by"
+msgstr "作成者"
+
+#. module: stock_report_common_sbt
+#: model:ir.model.fields,field_description:stock_report_common_sbt.field_stock_report_common_mixin__create_date
+msgid "Created on"
+msgstr "作成日"
+
+#. module: stock_report_common_sbt
+#: model:ir.model.fields,field_description:stock_report_common_sbt.field_stock_report_common_mixin__display_name
+msgid "Display Name"
+msgstr "表示名"
+
+#. module: stock_report_common_sbt
+#: code:addons/stock_report_common_sbt/models/stock_report_common_mixin.py:43
+#, python-format
+msgid "Draft"
+msgstr "ドラフト"
+
+#. module: stock_report_common_sbt
+#: model:ir.model.fields,field_description:stock_report_common_sbt.field_stock_report_common_mixin__id
+msgid "ID"
+msgstr ""
+
+#. module: stock_report_common_sbt
+#: code:addons/stock_report_common_sbt/models/stock_report_common_mixin.py:45
+#, python-format
+msgid "In Payment"
+msgstr "支払中"
+
+#. module: stock_report_common_sbt
+#: model:ir.model.fields,field_description:stock_report_common_sbt.field_stock_report_common_mixin____last_update
+msgid "Last Modified on"
+msgstr "最終更新日"
+
+#. module: stock_report_common_sbt
+#: model:ir.model.fields,field_description:stock_report_common_sbt.field_stock_report_common_mixin__write_uid
+msgid "Last Updated by"
+msgstr "最終更新者"
+
+#. module: stock_report_common_sbt
+#: model:ir.model.fields,field_description:stock_report_common_sbt.field_stock_report_common_mixin__write_date
+msgid "Last Updated on"
+msgstr "最終更新日"
+
+#. module: stock_report_common_sbt
+#: code:addons/stock_report_common_sbt/models/stock_report_common_mixin.py:44
+#, python-format
+msgid "Open"
+msgstr "オープン"
+
+#. module: stock_report_common_sbt
+#: code:addons/stock_report_common_sbt/models/stock_report_common_mixin.py:46
+#, python-format
+msgid "Paid"
+msgstr "支払済"
+
+#. module: stock_report_common_sbt
+#: model:ir.model,name:stock_report_common_sbt.model_stock_report_common_mixin
+msgid "stock.report.common.mixin"
+msgstr ""
+
