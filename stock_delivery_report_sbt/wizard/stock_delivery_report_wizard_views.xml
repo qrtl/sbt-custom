@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="stock_delivery_report_wizard" model="ir.ui.view">
+        <field name="name">Stock Delivery Report</field>
+        <field name="model">stock.delivery.report.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Stock Delivery Report">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="report_type" widget="radio" />
+                        </group>
+                        <separator />
+                        <group>
+                            <div class="o_row">
+                                <div class="o_row">
+                                    <span class="oe_inline" style="min-width: 145px">
+                                        <b>Date</b>
+                                    </span>
+                                    <field name="date_from" />
+                                    <span class="oe_inline">
+                                        ~
+                                    </span>
+                                    <field name="date_to" />
+                                </div>
+                            </div>
+                        </group>
+                        <separator />
+                        <group>
+                            <field name="picking_partner_ids" widget="many2many_tags" />
+                        </group>
+                        <separator />
+                        <group>
+                            <field name="state" />
+                        </group>
+                    </group>
+                </sheet>
+                <footer>
+                    <button
+                        string="Export (.xlsx)"
+                        name="button_export_xlsx"
+                        type="object"
+                        class="btn-primary"
+                    />
+                    <button string="Cancel" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+    <record id="action_stock_delivery_report_wizard" model="ir.actions.act_window">
+        <field name="name">Stock Delivery Report</field>
+        <field name="res_model">stock.delivery.report.wizard</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="stock_delivery_report_wizard" />
+        <field name="target">new</field>
+        <field name="context">{}</field>
+    </record>
+    <menuitem
+        id="menu_stock_delivery_report_wizard"
+        name="Stock Report"
+        parent="account_report_menu_node_sbt.report_account_monthly_report_menu"
+        action="action_stock_delivery_report_wizard"
+        sequence="1"
+    />
+</odoo>

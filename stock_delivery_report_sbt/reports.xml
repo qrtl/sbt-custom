@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <record id="action_stock_delivery_report_xlsx" model="ir.actions.report">
+        <field name="name">Stock Delivery Report Xlsx</field>
+        <field name="model">stock.delivery.report</field>
+        <field name="type">ir.actions.report</field>
+        <field
+            name="report_name"
+        >stock_delivery_report_sbt.stock_delivery_report_xlsx</field>
+        <field name="report_type">xlsx</field>
+        <field name="report_file">stock_delivery_report</field>
+    </record>
+
+</odoo>

@@ -1,0 +1,318 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* stock_delivery_report_sbt
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 12.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-12-24 14:41+0000\n"
+"PO-Revision-Date: 2020-12-24 14:41+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: stock_delivery_report_sbt
+#: code:addons/stock_delivery_report_sbt/report/stock_delivery_report_xlsx.py:86
+#, python-format
+msgid "%s ~ %s"
+msgstr ""
+
+#. module: stock_delivery_report_sbt
+#: model_terms:ir.ui.view,arch_db:stock_delivery_report_sbt.stock_delivery_report_wizard
+msgid "<span class=\"oe_inline\" style=\"min-width: 145px\">\n"
+"                                        <b>Date</b>\n"
+"                                    </span>"
+msgstr "<span class=\"oe_inline\" style=\"min-width: 145px\">\n"
+"                                        <b>出荷/返品日</b>\n"
+"                                    </span>"
+
+#. module: stock_delivery_report_sbt
+#: model_terms:ir.ui.view,arch_db:stock_delivery_report_sbt.stock_delivery_report_wizard
+msgid "Cancel"
+msgstr "取消"
+
+#. module: stock_delivery_report_sbt
+#: model:ir.model.fields,field_description:stock_delivery_report_sbt.field_report_stock_delivery_report_sbt_stock_delivery_report_xlsx__create_uid
+#: model:ir.model.fields,field_description:stock_delivery_report_sbt.field_stock_delivery_report__create_uid
+#: model:ir.model.fields,field_description:stock_delivery_report_sbt.field_stock_delivery_report_wizard__create_uid
+msgid "Created by"
+msgstr "作成者"
+
+#. module: stock_delivery_report_sbt
+#: model:ir.model.fields,field_description:stock_delivery_report_sbt.field_report_stock_delivery_report_sbt_stock_delivery_report_xlsx__create_date
+#: model:ir.model.fields,field_description:stock_delivery_report_sbt.field_stock_delivery_report__create_date
+#: model:ir.model.fields,field_description:stock_delivery_report_sbt.field_stock_delivery_report_wizard__create_date
+msgid "Created on"
+msgstr "作成日"
+
+#. module: stock_delivery_report_sbt
+#: model:ir.model.fields,field_description:stock_delivery_report_sbt.field_stock_delivery_report_wizard__picking_partner_ids
+msgid "Customer Code"
+msgstr "ストアコード"
+
+#. module: stock_delivery_report_sbt
+#: model:ir.model.fields,field_description:stock_delivery_report_sbt.field_stock_delivery_report__date_from
+#: model:ir.model.fields,field_description:stock_delivery_report_sbt.field_stock_delivery_report_wizard__date_from
+msgid "Date From"
+msgstr "開始日"
+
+#. module: stock_delivery_report_sbt
+#: model:ir.model.fields,field_description:stock_delivery_report_sbt.field_stock_delivery_report__date_to
+#: model:ir.model.fields,field_description:stock_delivery_report_sbt.field_stock_delivery_report_wizard__date_to
+msgid "Date To"
+msgstr "終了日"
+
+#. module: stock_delivery_report_sbt
+#: selection:stock.delivery.report,report_type:0
+#: selection:stock.delivery.report.wizard,report_type:0
+msgid "Delivery"
+msgstr "出荷"
+
+#. module: stock_delivery_report_sbt
+#: code:addons/stock_delivery_report_sbt/report/stock_delivery_report_xlsx.py:84
+#, python-format
+msgid "Delivery Date"
+msgstr "出荷日"
+
+#. module: stock_delivery_report_sbt
+#: code:addons/stock_delivery_report_sbt/report/stock_delivery_report_xlsx.py:46
+#, python-format
+msgid "Delivery/Return Amount"
+msgstr "出荷返品金額(現地)"
+
+#. module: stock_delivery_report_sbt
+#: code:addons/stock_delivery_report_sbt/report/stock_delivery_report_xlsx.py:58
+#, python-format
+msgid "Delivery/Return Amount (JPY)"
+msgstr "出荷返品金額(JPY)"
+
+#. module: stock_delivery_report_sbt
+#: code:addons/stock_delivery_report_sbt/report/stock_delivery_report_xlsx.py:25
+#, python-format
+msgid "Delivery/Return Date"
+msgstr "出荷返品日"
+
+#. module: stock_delivery_report_sbt
+#: code:addons/stock_delivery_report_sbt/report/stock_delivery_report_xlsx.py:40
+#, python-format
+msgid "Delivery/Return Qty"
+msgstr "出荷返品個数"
+
+#. module: stock_delivery_report_sbt
+#: model:ir.model.fields,field_description:stock_delivery_report_sbt.field_report_stock_delivery_report_sbt_stock_delivery_report_xlsx__display_name
+#: model:ir.model.fields,field_description:stock_delivery_report_sbt.field_stock_delivery_report__display_name
+#: model:ir.model.fields,field_description:stock_delivery_report_sbt.field_stock_delivery_report_wizard__display_name
+msgid "Display Name"
+msgstr "表示名"
+
+#. module: stock_delivery_report_sbt
+#: selection:stock.delivery.report,state:0
+#: selection:stock.delivery.report.wizard,state:0
+msgid "Draft"
+msgstr "ドラフト"
+
+#. module: stock_delivery_report_sbt
+#: code:addons/stock_delivery_report_sbt/report/stock_delivery_report_xlsx.py:70
+#, python-format
+msgid "Exchange Rate"
+msgstr "為替レート"
+
+#. module: stock_delivery_report_sbt
+#: model_terms:ir.ui.view,arch_db:stock_delivery_report_sbt.stock_delivery_report_wizard
+msgid "Export (.xlsx)"
+msgstr "エクスポート (.xlsx)"
+
+#. module: stock_delivery_report_sbt
+#: model:ir.model.fields,field_description:stock_delivery_report_sbt.field_stock_delivery_report__filter_picking_partner_ids
+msgid "Filter Picking Partner"
+msgstr ""
+
+#. module: stock_delivery_report_sbt
+#: code:addons/stock_delivery_report_sbt/report/stock_delivery_report_xlsx.py:24
+#, python-format
+msgid "Flag"
+msgstr "フラグ"
+
+#. module: stock_delivery_report_sbt
+#: model:ir.model.fields,field_description:stock_delivery_report_sbt.field_report_stock_delivery_report_sbt_stock_delivery_report_xlsx__id
+#: model:ir.model.fields,field_description:stock_delivery_report_sbt.field_stock_delivery_report__id
+#: model:ir.model.fields,field_description:stock_delivery_report_sbt.field_stock_delivery_report_wizard__id
+msgid "ID"
+msgstr ""
+
+#. module: stock_delivery_report_sbt
+#: selection:stock.delivery.report,state:0
+#: selection:stock.delivery.report.wizard,state:0
+msgid "In Payment"
+msgstr "支払中"
+
+#. module: stock_delivery_report_sbt
+#: code:addons/stock_delivery_report_sbt/report/stock_delivery_report_xlsx.py:75
+#, python-format
+msgid "Invoice Number"
+msgstr "請求書番号"
+
+#. module: stock_delivery_report_sbt
+#: model:ir.model.fields,field_description:stock_delivery_report_sbt.field_report_stock_delivery_report_sbt_stock_delivery_report_xlsx____last_update
+#: model:ir.model.fields,field_description:stock_delivery_report_sbt.field_stock_delivery_report____last_update
+#: model:ir.model.fields,field_description:stock_delivery_report_sbt.field_stock_delivery_report_wizard____last_update
+msgid "Last Modified on"
+msgstr "最終更新日"
+
+#. module: stock_delivery_report_sbt
+#: model:ir.model.fields,field_description:stock_delivery_report_sbt.field_report_stock_delivery_report_sbt_stock_delivery_report_xlsx__write_uid
+#: model:ir.model.fields,field_description:stock_delivery_report_sbt.field_stock_delivery_report__write_uid
+#: model:ir.model.fields,field_description:stock_delivery_report_sbt.field_stock_delivery_report_wizard__write_uid
+msgid "Last Updated by"
+msgstr "最終更新者"
+
+#. module: stock_delivery_report_sbt
+#: model:ir.model.fields,field_description:stock_delivery_report_sbt.field_report_stock_delivery_report_sbt_stock_delivery_report_xlsx__write_date
+#: model:ir.model.fields,field_description:stock_delivery_report_sbt.field_stock_delivery_report__write_date
+#: model:ir.model.fields,field_description:stock_delivery_report_sbt.field_stock_delivery_report_wizard__write_date
+msgid "Last Updated on"
+msgstr "最終更新日"
+
+#. module: stock_delivery_report_sbt
+#: code:addons/stock_delivery_report_sbt/report/stock_delivery_report_xlsx.py:34
+#, python-format
+msgid "Line No"
+msgstr "明細No"
+
+#. module: stock_delivery_report_sbt
+#: selection:stock.delivery.report,state:0
+#: selection:stock.delivery.report.wizard,state:0
+msgid "Open"
+msgstr "オープン"
+
+#. module: stock_delivery_report_sbt
+#: code:addons/stock_delivery_report_sbt/report/stock_delivery_report_xlsx.py:20
+#, python-format
+msgid "Order Number"
+msgstr "注文番号"
+
+#. module: stock_delivery_report_sbt
+#: selection:stock.delivery.report,state:0
+#: selection:stock.delivery.report.wizard,state:0
+msgid "Paid"
+msgstr "支払済"
+
+#. module: stock_delivery_report_sbt
+#: code:addons/stock_delivery_report_sbt/report/stock_delivery_report_xlsx.py:23
+#, python-format
+msgid "Payment Method"
+msgstr "決済手段"
+
+#. module: stock_delivery_report_sbt
+#: code:addons/stock_delivery_report_sbt/report/stock_delivery_report_xlsx.py:26
+#, python-format
+msgid "Product Code"
+msgstr "商品コード"
+
+#. module: stock_delivery_report_sbt
+#: code:addons/stock_delivery_report_sbt/report/stock_delivery_report_xlsx.py:27
+#, python-format
+msgid "Product Name"
+msgstr "商品名"
+
+#. module: stock_delivery_report_sbt
+#: model:ir.model.fields,field_description:stock_delivery_report_sbt.field_stock_delivery_report__report_type
+#: model:ir.model.fields,field_description:stock_delivery_report_sbt.field_stock_delivery_report_wizard__report_type
+msgid "Report Type"
+msgstr "レポートタイプ"
+
+#. module: stock_delivery_report_sbt
+#: selection:stock.delivery.report,report_type:0
+#: selection:stock.delivery.report.wizard,report_type:0
+msgid "Return"
+msgstr "返品"
+
+#. module: stock_delivery_report_sbt
+#: code:addons/stock_delivery_report_sbt/report/stock_delivery_report_xlsx.py:85
+#, python-format
+msgid "Return Date"
+msgstr "返品日"
+
+#. module: stock_delivery_report_sbt
+#: code:addons/stock_delivery_report_sbt/report/stock_delivery_report_xlsx.py:77
+#: code:addons/stock_delivery_report_sbt/report/stock_delivery_report_xlsx.py:97
+#: model:ir.model.fields,field_description:stock_delivery_report_sbt.field_stock_delivery_report__state
+#: model:ir.model.fields,field_description:stock_delivery_report_sbt.field_stock_delivery_report_wizard__state
+#, python-format
+msgid "Status"
+msgstr "ステータス"
+
+#. module: stock_delivery_report_sbt
+#: code:addons/stock_delivery_report_sbt/report/stock_delivery_report_xlsx.py:16
+#: model:ir.actions.act_window,name:stock_delivery_report_sbt.action_stock_delivery_report_wizard
+#: model_terms:ir.ui.view,arch_db:stock_delivery_report_sbt.stock_delivery_report_wizard
+#, python-format
+msgid "Stock Delivery Report"
+msgstr "出荷返品レポート"
+
+#. module: stock_delivery_report_sbt
+#: model:ir.actions.report,name:stock_delivery_report_sbt.action_stock_delivery_report_xlsx
+msgid "Stock Delivery Report Xlsx"
+msgstr "出荷返品レポート Xlsx"
+
+#. module: stock_delivery_report_sbt
+#: model:ir.ui.menu,name:stock_delivery_report_sbt.menu_stock_delivery_report_wizard
+msgid "Stock Report"
+msgstr "出荷返品レポート"
+
+#. module: stock_delivery_report_sbt
+#: code:addons/stock_delivery_report_sbt/report/stock_delivery_report_xlsx.py:21
+#: code:addons/stock_delivery_report_sbt/report/stock_delivery_report_xlsx.py:89
+#, python-format
+msgid "Store Code"
+msgstr "ストアコード"
+
+#. module: stock_delivery_report_sbt
+#: code:addons/stock_delivery_report_sbt/report/stock_delivery_report_xlsx.py:22
+#, python-format
+msgid "Store Name"
+msgstr "ストア名"
+
+#. module: stock_delivery_report_sbt
+#: code:addons/stock_delivery_report_sbt/report/stock_delivery_report_xlsx.py:29
+#, python-format
+msgid "Supplier Product Code"
+msgstr "仕入先商品コード"
+
+#. module: stock_delivery_report_sbt
+#: code:addons/stock_delivery_report_sbt/report/stock_delivery_report_xlsx.py:52
+#, python-format
+msgid "Tax Amount"
+msgstr "消費税(現地)"
+
+#. module: stock_delivery_report_sbt
+#: code:addons/stock_delivery_report_sbt/report/stock_delivery_report_xlsx.py:64
+#, python-format
+msgid "Tax Amount (JPY)"
+msgstr "消費税(JPY)"
+
+#. module: stock_delivery_report_sbt
+#: code:addons/stock_delivery_report_sbt/report/stock_delivery_report_xlsx.py:76
+#, python-format
+msgid "Unified number"
+msgstr "統一発票番号"
+
+#. module: stock_delivery_report_sbt
+#: model:ir.model,name:stock_delivery_report_sbt.model_report_stock_delivery_report_sbt_stock_delivery_report_xlsx
+msgid "report.stock_delivery_report_sbt.stock_delivery_report_xlsx"
+msgstr ""
+
+#. module: stock_delivery_report_sbt
+#: model:ir.model,name:stock_delivery_report_sbt.model_stock_delivery_report
+msgid "stock.delivery.report"
+msgstr ""
+
+#. module: stock_delivery_report_sbt
+#: model:ir.model,name:stock_delivery_report_sbt.model_stock_delivery_report_wizard
+msgid "stock.delivery.report.wizard"
+msgstr ""
+
