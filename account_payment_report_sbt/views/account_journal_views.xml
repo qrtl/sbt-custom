@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="sbt_view_account_journal_form_inherited" model="ir.ui.view">
+        <field name="name">sbt.account.journal.form.inherited</field>
+        <field name="model">account.journal</field>
+        <field name="inherit_id" ref="account.view_account_journal_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='code']" position="after">
+                <field name="company_name" />
+            </xpath>
+        </field>
+    </record>
+
+    <record id="sbt_view_account_journal_tree_inherited" model="ir.ui.view">
+        <field name="name">sbt.account.journal.tree.inherited</field>
+        <field name="model">account.journal</field>
+        <field name="inherit_id" ref="account.view_account_journal_tree" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="company_name" />
+            </xpath>
+        </field>
+    </record>
+</odoo>
