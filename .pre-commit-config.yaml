@@ -12,10 +12,7 @@ exclude: |
   (LICENSE.*|COPYING.*)|
   # Exclude .travis.yml
   ^\.travis\.yml$|
-  # For v12.0 of before, exclude all oca modules
-  report_xlsx/|
-  sbt_sale/|
-  web_widget_many2many_tags_multi_selection/
+  ^pyproject\.toml$
 default_language_version:
   python: python3
   node: "14.13.0"
