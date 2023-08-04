@@ -22,13 +22,13 @@ class EbisumartBackend(models.Model):
     refresh_token = fields.Char()
     token_expiration = fields.Datetime()
     redirect_uri = fields.Char()
-    shop_id = fields.Integer()
+    shop_id = fields.Char()
 
     def get_authorize_url(self):
         root_url = self.root_ebisumart_url
         root_url += self.ebisumart_number + "/admin_authorize.html"
         base_url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
-        redirect_uri = f"{base_url}/{self.redirect_uri}"
+        redirect_uri = self.redirect_uri
         authorize_url = f"{root_url}?scope=read%20write&response_type=code&redirect_uri={redirect_uri}&client_id={self.app_code}&state="
         return authorize_url
 
