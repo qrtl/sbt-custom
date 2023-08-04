@@ -7,7 +7,6 @@ class ProductImportMapper(Component):
     _inherit = 'ebisumart.import.mapper'
     _apply_on = ['ebisumart.product.product']
 
-    # TODO :     categ, special_price => minimal_price
     direct = []
 
     @only_create

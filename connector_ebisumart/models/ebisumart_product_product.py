@@ -1,7 +1,7 @@
 # Copyright 2023 Quartile Limited
 
 from odoo.addons.component.core import Component
-from odoo.addons.connector.components.adapter import CRUDAdapter
+
 
 from odoo import fields, models
 

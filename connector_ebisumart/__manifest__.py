@@ -8,8 +8,8 @@
     "license": "AGPL-3",
     "depends": ["product","connector"],
     "data": [
-        "views/product_product_views.xml",
-        "views/product_template_views.xml",
+        "security/ir.model.access.csv",
+        "views/ebisumart_backend_views.xml",
     ],
     "installable": True,
 }

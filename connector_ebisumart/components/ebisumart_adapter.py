@@ -10,24 +10,26 @@ class EbisumartCRUDAdapter(AbstractComponent):
 
     def search(self, filters=None):
         """ Search records according to some filters """
-        # we should replace this comment with the actual logic to interact with the Ebisumart API.
+        raise NotImplementedError
 
     def read(self, external_id, fields=None):
         """ Returns the detailed information for record """
-        # we should replace this comment with the actual logic to interact with the Ebisumart API.
+        raise NotImplementedError
 
     def create(self, data):
         """ Create a record on the external system """
-        # we should replace this comment with the actual logic to interact with the Ebisumart API.
+        raise NotImplementedError
 
     def write(self, external_id, data):
         """ Update records on the external system """
-        # we should replace this comment with the actual logic to interact with the Ebisumart API.
+        raise NotImplementedError
 
     def delete(self, external_id):
         """ Delete a record on the external system """
-        # we should replace this comment with the actual logic to interact with the Ebisumart API.
+        raise NotImplementedError
 
 class EbisumartAdapater(AbstractComponent):
     _name = "ebisumart.adapater"
     _inherit = "ebisumart.crud.adapter"
+
+    

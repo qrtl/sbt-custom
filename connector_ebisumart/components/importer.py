@@ -5,9 +5,14 @@ class EbisumartImporter(AbstractComponent):
     _inherit = ['base.importer', 'base.ebisumart.connector']
     _usage = 'record.importer'
     
-    def run(self, external_id, force=False):
+    def __init__(self, work_context):
+        super(EbisumartImporter, self).__init__(work_context)
+        self.external_id = None
+        self.ebisumart_record = None
+
+    def run(self, external_id, force=False, data=None):
         """Run the synchronization job. The specific behavior will be defined in the child classes."""
-        raise NotImplementedError
+        
 
 
 class BatchImporter(AbstractComponent):
