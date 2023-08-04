@@ -17,7 +17,6 @@ class EbisumartBackend(models.Model):
     app_code = fields.Char()
     password = fields.Char()
     root_ebisumart_url = fields.Char()
-    authorization_code = fields.Char()
     access_token = fields.Char()
     refresh_token = fields.Char()
     token_expiration = fields.Datetime()
@@ -27,9 +26,8 @@ class EbisumartBackend(models.Model):
     def get_authorize_url(self):
         root_url = self.root_ebisumart_url
         root_url += self.ebisumart_number + "/admin_authorize.html"
-        base_url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
         redirect_uri = self.redirect_uri
-        authorize_url = f"{root_url}?scope=read%20write&response_type=code&redirect_uri={redirect_uri}&client_id={self.app_code}&state="
+        authorize_url = f"{root_url}?scope=item privacy system&response_type=code&redirect_uri={redirect_uri}&client_id={self.app_code}"
         return authorize_url
 
     def open_authorization_url(self):
@@ -74,7 +72,8 @@ class EbisumartBackend(models.Model):
             # Save the token in the backend record
             self.access_token = response_data['access_token']
             self.refresh_token = response_data['refresh_token']
-            self.token_expiration = response_data['expires_in']
+            expiry_time = datetime.now() + timedelta(seconds=response_data['expires_in'])
+            self.token_expiration = expiry_time.strftime('%Y-%m-%d %H:%M:%S')
             self.shop_id = response_data['shop_id']
         else:
             # TODO: Handle the error case

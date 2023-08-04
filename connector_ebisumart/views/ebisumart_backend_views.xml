@@ -25,7 +25,6 @@
                         <field name="password"/>
                         <field name="root_ebisumart_url"/>
                         <field name="redirect_uri"/>
-                        <field name="authorization_code" readonly="1"/>
                         <field name="access_token" readonly="1"/>
                         <field name="refresh_token" readonly="1"/>
                         <field name="token_expiration" readonly="1"/>
