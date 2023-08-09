@@ -45,7 +45,7 @@ class ProductAdapter(Component):
         """ Returns the detailed information for an existing product."""
         # Adjust the URL endpoint accordingly
         if not attributes:
-            attributes = ['ITEM_NAME','ITEM_ID', 'ITEM_CD', 'TEIKA', 'REGIST_DATE', 'UPDATE_DATE']  # Define default attributes to fetch
+            attributes = ['ITEM_NAME','ITEM_ID', 'ITEM_CD', 'TEIKA', 'SHIRE_PRICE', 'REGIST_DATE', 'UPDATE_DATE']  # Define default attributes to fetch
         return super().read(f"/items/{external_id}", attributes=attributes)
 
     def _create(self, data):

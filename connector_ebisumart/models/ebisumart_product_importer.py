@@ -15,7 +15,7 @@ class ProductImportMapper(Component):
         ("ITEM_NAME", "name"),
         ("ITEM_CD", "default_code"),
         ("TEIKA", "list_price"),
-        ("SHIIRE_PRICE", "standard_price"),
+        ("SHIRE_PRICE", "standard_price"),
         (normalize_datetime('REGIST_DATE'), 'created_at'),
         (normalize_datetime('UPDATE_DATE'), 'updated_at'),
     ]

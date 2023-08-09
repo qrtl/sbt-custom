@@ -14,13 +14,13 @@ class EbisumartBackend(models.Model):
     _description = 'Ebisumart Backend'
     
     # fields and methods specific to our backend
-    name = fields.Char(requried=True)
-    ebisumart_number = fields.Char(string='Ebisumart No')
-    app_code = fields.Char(requried=True)
-    password = fields.Char(requried=True)
-    root_ebisumart_url = fields.Char(requried=True)
+    name = fields.Char(required=True)
+    ebisumart_number = fields.Char(required=True, string='Ebisumart No')
+    app_code = fields.Char(required=True)
+    password = fields.Char(required=True)
+    root_ebisumart_url = fields.Char(required=True)
     ebisumart_access_url = fields.Char(required=True)
-    ebisumart_api_url = fields.Char(requried=True)
+    ebisumart_api_url = fields.Char(required=True)
     api_version = fields.Char(default='1')
     access_token = fields.Char()
     refresh_token = fields.Char()
@@ -35,7 +35,7 @@ class EbisumartBackend(models.Model):
     )
     def get_authorize_url(self):
         root_url = self.root_ebisumart_url
-        root_url += self.ebisumart_number + "/admin_authorize.html"
+        root_url += "/" + self.ebisumart_number + "/admin_authorize.html"
         redirect_uri = self.redirect_uri
         authorize_url = f"{root_url}?scope=item privacy system&response_type=code&redirect_uri={redirect_uri}&client_id={self.app_code}"
         return authorize_url
@@ -55,7 +55,7 @@ class EbisumartBackend(models.Model):
     def get_token(self, auth_code):
         """Retrieve token"""
         # Define the API Endpoint
-        oauth_url = f"https://{self.ebisumart_access_url}/{self.ebisumart_number}/app_oauth/access_token.html"
+        oauth_url = f"{self.ebisumart_access_url}/{self.ebisumart_number}/app_oauth/access_token.html"
         
         # Define the Headers
         headers = {
@@ -93,7 +93,7 @@ class EbisumartBackend(models.Model):
         """Refresh the token"""
         # Check if the token is expired
         backend = self.env['ebisumart.backend'].sudo().search([])[0]
-        oauth_url = f"https://{backend.ebisumart_access_url}/{backend.ebisumart_number}/app_oauth/access_token.html"
+        oauth_url = f"{backend.ebisumart_access_url}/{backend.ebisumart_number}/app_oauth/access_token.html"
         
         # Define the Headers
         headers = {
