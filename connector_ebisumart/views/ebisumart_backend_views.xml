@@ -33,33 +33,6 @@
                         <field name="token_expiration" readonly="1"/>
                         <field name="shop_id" readonly="1"/>
                     </group>
-                    <notebook>
-                        <page name="import" string="Imports">
-                            <p class="oe_grey oe_inline">
-                                By clicking on the buttons,
-                                you will initiate the synchronizations
-                                with Ebisumart.
-                                Note that the import
-                                won't be done directly,
-                                they will create 'Jobs'
-                                executed as soon as possible.
-                            </p>
-                            <group>
-                                <div>
-                                    <label for="import_products_from_date"
-                                        string="Import products since"
-                                        class="oe_inline"/>
-                                    <field name="import_products_from_date"
-                                        class="oe_inline"
-                                        nolabel="1"/>
-                                </div>
-                                <button name="import_product_product"
-                                    type="object"
-                                    class="oe_highlight"
-                                    string="Import in background"/>
-                            </group>
-                        </page>
-                    </notebook>
                 </sheet>
             </form>
         </field>

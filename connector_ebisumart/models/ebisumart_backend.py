@@ -27,12 +27,7 @@ class EbisumartBackend(models.Model):
     token_expiration = fields.Datetime()
     redirect_uri = fields.Char()
     shop_id = fields.Char()
-    import_products_from_date = fields.Datetime(
-        string='Import products from date',
-    )
-    import_categories_from_date = fields.Datetime(
-        string='Import categories from date',
-    )
+    
     def get_authorize_url(self):
         root_url = self.root_ebisumart_url
         root_url += "/" + self.ebisumart_number + "/admin_authorize.html"
@@ -132,16 +127,10 @@ class EbisumartBackend(models.Model):
                               self._name, self.id)
 
     # TODO
-    # Handle filters 
+    # Handle filters and import with date
     @api.multi
-    def _import_from_date(self, model, from_date_field):
-        import_start_time = datetime.now()
+    def _import_from_date(self, model):
         for backend in self:
-            from_date = backend[from_date_field]
-            if from_date:
-                from_date = fields.Datetime.from_string(from_date)
-            else:
-                from_date = None
             self.env[model].with_delay().import_batch(
                 backend,
                 filters=None
@@ -150,14 +139,12 @@ class EbisumartBackend(models.Model):
     # For future use case
     @api.multi
     def import_product_categories(self):
-        self._import_from_date('ebisumart.product.category',
-                               'import_categories_from_date')
+        self._import_from_date('ebisumart.product.category')
         return True
 
     @api.multi
     def import_product_product(self):
-        self._import_from_date('ebisumart.product.product',
-                               'import_products_from_date')
+        self._import_from_date('ebisumart.product.product')
         return True
 
     @api.model
