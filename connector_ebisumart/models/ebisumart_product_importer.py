@@ -54,3 +54,8 @@ class EbisumartProductImporter(Component):
     _name = 'ebisumart.product.product.importer'
     _inherit = 'ebisumart.importer'
     _apply_on = 'ebisumart.product.product'
+
+    def _create(self, data):
+        binding = super()._create(data)
+        self.backend_record.add_checkpoint(binding)
+        return binding

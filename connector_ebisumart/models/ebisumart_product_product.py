@@ -2,8 +2,6 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
 from odoo.addons.component.core import Component
-
-
 from odoo import fields, models
 
 class EbisumartProduct(models.Model):
@@ -48,7 +46,3 @@ class ProductAdapter(Component):
             attributes = ['ITEM_NAME','ITEM_ID', 'ITEM_CD', 'TEIKA', 'SHIRE_PRICE', 'REGIST_DATE', 'UPDATE_DATE']  # Define default attributes to fetch
         return super().read(f"/items/{external_id}", attributes=attributes)
 
-    def _create(self, data):
-        binding = super()._create(data)
-        self.backend_record.add_checkpoint(binding)
-        return binding
