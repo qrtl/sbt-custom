@@ -22,14 +22,44 @@
                         <field name="name"/>
                         <field name="ebisumart_number"/>
                         <field name="app_code"/>
-                        <field name="password"/>
+                        <field name="password" password="True"/>
                         <field name="root_ebisumart_url"/>
+                        <field name="ebisumart_access_url"/>
+                        <field name="ebisumart_api_url"/>
+                        <field name="api_version"/>
                         <field name="redirect_uri"/>
                         <field name="access_token" readonly="1"/>
                         <field name="refresh_token" readonly="1"/>
                         <field name="token_expiration" readonly="1"/>
                         <field name="shop_id" readonly="1"/>
                     </group>
+                    <notebook>
+                        <page name="import" string="Imports">
+                            <p class="oe_grey oe_inline">
+                                By clicking on the buttons,
+                                you will initiate the synchronizations
+                                with Ebisumart.
+                                Note that the import
+                                won't be done directly,
+                                they will create 'Jobs'
+                                executed as soon as possible.
+                            </p>
+                            <group>
+                                <div>
+                                    <label for="import_products_from_date"
+                                        string="Import products since"
+                                        class="oe_inline"/>
+                                    <field name="import_products_from_date"
+                                        class="oe_inline"
+                                        nolabel="1"/>
+                                </div>
+                                <button name="import_product_product"
+                                    type="object"
+                                    class="oe_highlight"
+                                    string="Import in background"/>
+                            </group>
+                        </page>
+                    </notebook>
                 </sheet>
             </form>
         </field>
@@ -45,6 +75,4 @@
             </p>
         </field>
     </record>
-
-    <menuitem id="menu_ebisumart_backend" name="Ebisumart Backend" parent="base.menu_administration" action="action_ebisumart_backend" sequence="20"/>
 </odoo>

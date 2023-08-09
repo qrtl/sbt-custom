@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_product_category_form" model="ir.ui.view">
+        <field name="name">product.category.form.ebisumart</field>
+        <field name="model">product.category</field>
+        <field name="inherit_id" ref="product.product_category_form_view"/>
+        <field name="groups_id"
+               eval="[(4, ref('connector.group_connector_manager'))]"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group[last()]" position="after">
+                <group name="ebisumart" string="Ebisumart Bindings">
+                    <field name="ebisumart_bind_ids" nolabel="1">
+                        <tree>
+                            <field name="backend_id"/>
+                        </tree>
+                    </field>
+                </group>
+            </xpath>
+        </field>
+    </record>
+    <record id="view_ebisumart_product_category_form" model="ir.ui.view">
+        <field name="name">ebisumart.product.category.form</field>
+        <field name="model">ebisumart.product.category</field>
+        <field name="arch" type="xml">
+            <form string="Ebisumart Product Category">
+                <group>
+                    <field name="backend_id"/>
+                    <field name="external_id"/>
+                    <field name="ebisumart_parent_id"/>
+                    <field name="ebisumart_child_ids"/>
+                </group>
+            </form>
+        </field>
+    </record>
+    <record id="view_ebisumart_product_category_tree" model="ir.ui.view">
+        <field name="name">ebisumart.product.category.tree</field>
+        <field name="model">ebisumart.product.category</field>
+        <field name="arch" type="xml">
+            <tree string="Ebisumart Product Category">
+                <field name="backend_id"/>
+            </tree>
+        </field>
+    </record>
+</odoo>

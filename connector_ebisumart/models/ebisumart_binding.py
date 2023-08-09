@@ -1,7 +1,7 @@
 # Copyright 2023 Quartile Limited
+# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 from odoo import models, fields, api
-from odoo.addons.queue_job.job import job
 
 
 class EbisumartBinding(models.AbstractModel):
@@ -24,10 +24,7 @@ class EbisumartBinding(models.AbstractModel):
 
     # The id from the Ebisumart
     external_id = fields.Char(string='ID on Ebisumart', index=True)
-    # Add a field to mark when a record was last updated on Ebisumart
-    external_last_update = fields.Datetime(string='Last Updated on Ebisumart')
 
-    @job(default_channel='root.ebisumart')
     @api.model
     def import_batch(self, backend, filters=None):
         """ Prepare the import of records modified on Ebisumart """
@@ -37,7 +34,6 @@ class EbisumartBinding(models.AbstractModel):
             importer = work.component(usage='batch.importer')
             return importer.run(filters=filters)
 
-    @job(default_channel='root.ebisumart')
     @api.model
     def import_record(self, backend, external_id, force=False):
         """ Import a Ebisumart record """
