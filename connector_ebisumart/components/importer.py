@@ -113,7 +113,6 @@ class EbisumartImporter(AbstractComponent):
             self.work.model_name,
             external_id,
         )
-
         if data:
             self.ebisumart_record = data
         else:

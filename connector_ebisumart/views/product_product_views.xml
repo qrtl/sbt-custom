@@ -31,6 +31,7 @@
                     <field name="external_id"/>
                     <field name="created_at" readonly="1"/>
                     <field name="updated_at" readonly="1"/>
+                    <field name="torihikisaki_id" />
                 </group>
             </form>
         </field>

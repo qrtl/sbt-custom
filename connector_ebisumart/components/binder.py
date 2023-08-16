@@ -17,4 +17,6 @@ class EbisumarttoModelBinder(Component):
     _inherit = ['base.binder', 'base.ebisumart.connector']
     _apply_on = [
         'ebisumart.product.product',
+        'ebisumart.purchase.order',
+        'ebisumart.purchase.order.line',
     ]

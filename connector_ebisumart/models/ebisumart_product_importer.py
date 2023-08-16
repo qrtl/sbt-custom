@@ -16,6 +16,7 @@ class ProductImportMapper(Component):
         ("ITEM_CD", "default_code"),
         ("TEIKA", "list_price"),
         ("SHIRE_PRICE", "standard_price"),
+        ("TORIHIKISAKI_ID", "torihikisaki_id"),
         (normalize_datetime('REGIST_DATE'), 'created_at'),
         (normalize_datetime('UPDATE_DATE'), 'updated_at'),
     ]
@@ -34,11 +35,6 @@ class ProductImportMapper(Component):
         return {'backend_id': self.backend_record.id}
 
 class ProductBatchImporter(Component):
-    """ Import the Ebisumart Products.
-
-    For every product category in the list, a delayed job is created.
-    Import from a date
-    """
     _name = 'ebisumart.product.product.batch.importer'
     _inherit = 'ebisumart.delayed.batch.importer'
     _apply_on = ['ebisumart.product.product']
@@ -54,8 +50,3 @@ class EbisumartProductImporter(Component):
     _name = 'ebisumart.product.product.importer'
     _inherit = 'ebisumart.importer'
     _apply_on = 'ebisumart.product.product'
-
-    def _create(self, data):
-        binding = super()._create(data)
-        self.backend_record.add_checkpoint(binding)
-        return binding

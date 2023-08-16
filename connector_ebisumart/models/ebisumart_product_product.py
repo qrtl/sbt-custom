@@ -14,9 +14,7 @@ class EbisumartProduct(models.Model):
                              required=True, ondelete='cascade')
     created_at = fields.Date('Created At (on Ebisumart)')
     updated_at = fields.Date('Updated At (on Ebisumart)')
-
-    # TODO
-    # add related fields depends on requriements
+    torihikisaki_id = fields.Integer("Partner ID on ebisumart", readonly=True, store=True)
 
 class ProductProduct(models.Model):
     _inherit = 'product.product'

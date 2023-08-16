@@ -143,8 +143,21 @@ class EbisumartBackend(models.Model):
         return True
 
     @api.multi
+    def _import_orders(self, model):
+        for backend in self:
+            self.env[model].with_delay().import_batch(
+                backend,
+                filters=None
+            )
+
+    @api.multi
     def import_product_product(self):
         self._import_from_date('ebisumart.product.product')
+        return True
+
+    @api.multi
+    def import_orders(self):
+        self._import_orders('ebisumart.purchase.order')
         return True
 
     @api.model
@@ -163,3 +176,7 @@ class EbisumartBackend(models.Model):
     @api.model
     def _scheduler_import_product_product(self, domain=None):
         self._ebisumart_backend('import_product_product', domain=domain)
+
+    @api.model
+    def _scheduler_import_orders(self, domain=None):
+        self._ebisumart_backend('import_orders', domain=domain)
