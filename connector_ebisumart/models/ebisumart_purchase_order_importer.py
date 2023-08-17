@@ -5,7 +5,7 @@ from odoo.addons.component.core import Component
 from odoo.addons.connector.components.mapper import mapping
 from ..components.mapper import normalize_datetime
 from odoo import fields
-
+import logging
 
 class PurchaseOrderImportMapper(Component):
     _name = 'ebisumart.purchase.order.import.mapper'
@@ -15,6 +15,7 @@ class PurchaseOrderImportMapper(Component):
     direct = [
         ("ORDER_NO", "external_id"),
         ("ORDER_DISP_NO", "name"),
+        (normalize_datetime('SEND_DATE'), 'date_order'),
         (normalize_datetime('REGIST_DATE'), 'created_at'),
         (normalize_datetime('UPDATE_DATE'), 'updated_at'),
     ]
@@ -64,7 +65,13 @@ class PurchaseOrderBatchImporter(Component):
     def run(self, filters=None):
         """ Run the synchronization """
         external_datas = self.backend_adapter.search(filters)
-        external_ids = [order["ORDER_NO"] for order in external_datas if order['ORDER_DISP_NO'] and order['AUTHORY_DATE'] and order['SEND_DATE']]
+        external_ids = [
+            order["ORDER_NO"]
+            for order in external_datas
+            if order.get('ORDER_DISP_NO') and
+            order.get('AUTHORY_DATE') and
+            order.get('SEND_DATE')
+        ]
         for external_id in external_ids:
             self._import_record(external_id)
 
