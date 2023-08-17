@@ -8,3 +8,4 @@ class ResPartner(models.Model):
     _inherit = 'res.partner'
 
     ebisumart_id = fields.Integer(string="TORHIKISAKI CD")
+    sales_partner = fields.Many2one('res.partner')

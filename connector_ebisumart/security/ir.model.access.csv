@@ -3,3 +3,5 @@ access_ebisumart_backend,ebisumart.backend,model_ebisumart_backend,base.group_us
 access_ebisumart_product_product,ebisumart.product.product,model_ebisumart_product_product,base.group_user,1,1,1,1
 access_ebisumart_purchase_order,ebisumart.purchase.order,model_ebisumart_purchase_order,base.group_user,1,1,1,1
 access_ebisumart_purchase_order_line,ebisumart.purchase.order.line,model_ebisumart_purchase_order_line,base.group_user,1,1,1,1
+access_ebisumart_sale_order,ebisumart.sale.order,model_ebisumart_sale_order,base.group_user,1,1,1,1
+access_ebisumart_sale_order_line,ebisumart.sale.order.line,model_ebisumart_sale_order_line,base.group_user,1,1,1,1

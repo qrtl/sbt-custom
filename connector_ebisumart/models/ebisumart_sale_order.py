@@ -5,16 +5,16 @@ from odoo.addons.component.core import Component
 from odoo import fields, models, api
 
 
-class EbisumartPurchaseOrder(models.Model):
-    _name = 'ebisumart.purchase.order'
+class EbisumartSaleOrder(models.Model):
+    _name = 'ebisumart.sale.order'
     _inherit = 'ebisumart.binding'
-    _inherits = {'purchase.order': 'odoo_id'}
-    _description = 'Ebisumart Purchase Order'
+    _inherits = {'sale.order': 'odoo_id'}
+    _description = 'Ebisumart Sale Order'
 
-    odoo_id = fields.Many2one(comodel_name='purchase.order', string='Purchase Order',
+    odoo_id = fields.Many2one(comodel_name='sale.order', string='Sale Order',
                              required=True, ondelete='cascade')
     ebisumart_order_line_ids = fields.One2many(
-        comodel_name='ebisumart.purchase.order.line',
+        comodel_name='ebisumart.sale.order.line',
         inverse_name='ebisumart_order_id',
         string='Ebisumart Order Lines'
     )
@@ -22,28 +22,28 @@ class EbisumartPurchaseOrder(models.Model):
     updated_at = fields.Date('Updated At (on Ebisumart)')
 
 
-class PurchaseOrder(models.Model):
-    _inherit = 'purchase.order'
+class SaleOrder(models.Model):
+    _inherit = 'sale.order'
 
     ebisumart_bind_ids = fields.One2many(
-        comodel_name='ebisumart.purchase.order',
+        comodel_name='ebisumart.sale.order',
         inverse_name='odoo_id',
         string='Ebisumart Bindings',
     )
 
-class EbisumartPurchaseOrderLine(models.Model):
-    _name = 'ebisumart.purchase.order.line'
+class EbisumartsaleOrderLine(models.Model):
+    _name = 'ebisumart.sale.order.line'
     _inherit = 'ebisumart.binding'
-    _description = 'Ebisumart Purchase Order Line'
-    _inherits = {'purchase.order.line': 'odoo_id'}
+    _description = 'Ebisumart Sale Order Line'
+    _inherits = {'sale.order.line': 'odoo_id'}
 
-    ebisumart_order_id = fields.Many2one(comodel_name='ebisumart.purchase.order',
-                                       string='Ebisumart Purchase Order',
+    ebisumart_order_id = fields.Many2one(comodel_name='ebisumart.sale.order',
+                                       string='Ebisumart Sale Order',
                                        required=True,
                                        ondelete='cascade',
                                        index=True)
-    odoo_id = fields.Many2one(comodel_name='purchase.order.line',
-                              string='Purchase Order Line',
+    odoo_id = fields.Many2one(comodel_name='sale.order.line',
+                              string='Sale Order Line',
                               required=True,
                               ondelete='cascade')
     backend_id = fields.Many2one(
@@ -57,15 +57,15 @@ class EbisumartPurchaseOrderLine(models.Model):
     @api.model
     def create(self, vals):
         ebisumart_order_id = vals['ebisumart_order_id']
-        binding = self.env['ebisumart.purchase.order'].browse(ebisumart_order_id)
+        binding = self.env['ebisumart.sale.order'].browse(ebisumart_order_id)
         vals['order_id'] = binding.odoo_id.id
-        binding = super(EbisumartPurchaseOrderLine, self).create(vals)
+        binding = super(EbisumartsaleOrderLine, self).create(vals)
         return binding
     
 class ProductAdapter(Component):
-    _name = 'ebisumart.purchase.order.adapter'
+    _name = 'ebisumart.sale.order.adapter'
     _inherit = ['ebisumart.adapter']
-    _apply_on = ['ebisumart.purchase.order']
+    _apply_on = ['ebisumart.sale.order']
     
     # Add methods for communicating with the Ebisumart API
 
@@ -85,5 +85,5 @@ class ProductAdapter(Component):
         """ Returns the detailed information for an existing product."""
         # Adjust the URL endpoint accordingly
         if not attributes:
-            attributes = ['ORDER_NO','KESSAI_ID','ORDER_DISP_NO','SEND_DATE','order_details(ORDER_D_NO,ITEM_ID,ITEM_NAME,QUANTITY,SHIRE_PRICE)', 'REGIST_DATE', 'UPDATE_DATE']  # Define default attributes to fetch
+            attributes = ['ORDER_NO','KESSAI_ID','ORDER_DISP_NO','SEND_DATE','order_details(ORDER_D_NO,ITEM_ID,ITEM_NAME,QUANTITY,TEIKA)', 'REGIST_DATE', 'UPDATE_DATE']  # Define default attributes to fetch
         return super().read(f"/orders/{external_id}", attributes=attributes)

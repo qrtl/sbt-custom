@@ -19,4 +19,6 @@ class EbisumarttoModelBinder(Component):
         'ebisumart.product.product',
         'ebisumart.purchase.order',
         'ebisumart.purchase.order.line',
+        'ebisumart.sale.order',
+        'ebisumart.sale.order.line',
     ]

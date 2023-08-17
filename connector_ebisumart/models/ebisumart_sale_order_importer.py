@@ -7,10 +7,10 @@ from ..components.mapper import normalize_datetime
 from odoo import fields
 
 
-class PurchaseOrderImportMapper(Component):
-    _name = 'ebisumart.purchase.order.import.mapper'
+class SaleOrderImportMapper(Component):
+    _name = 'ebisumart.sale.order.import.mapper'
     _inherit = 'ebisumart.import.mapper'
-    _apply_on = ['ebisumart.purchase.order']
+    _apply_on = ['ebisumart.sale.order']
 
     direct = [
         ("ORDER_NO", "external_id"),
@@ -18,7 +18,7 @@ class PurchaseOrderImportMapper(Component):
         (normalize_datetime('REGIST_DATE'), 'created_at'),
         (normalize_datetime('UPDATE_DATE'), 'updated_at'),
     ]
-    children = [('order_details', 'ebisumart_order_line_ids', 'ebisumart.purchase.order.line')]
+    children = [('order_details', 'ebisumart_order_line_ids', 'ebisumart.sale.order.line')]
 
     @mapping
     def partner_id(self, record):
@@ -26,22 +26,22 @@ class PurchaseOrderImportMapper(Component):
             binder = self.binder_for('ebisumart.product.product')
             product = binder.to_internal(line['ITEM_ID'], unwrap=True)
             if product:
-                partner = self.env["res.partner"].search([('supplier','=',True)],limit=1)
+                partner = self.env["res.partner"].search([('customer','=',True)],limit=1)
                 return {'partner_id': partner.id}
 
     @mapping
     def backend_id(self, record):
         return {'backend_id': self.backend_record.id}
 
-class PurchaseOrderLineMapper(Component):
-    _name = 'ebisumart.purchase.order.line.mapper'
+class SaleOrderLineMapper(Component):
+    _name = 'ebisumart.sale.order.line.mapper'
     _inherit = 'ebisumart.import.mapper'
-    _apply_on = 'ebisumart.purchase.order.line'
+    _apply_on = 'ebisumart.sale.order.line'
 
     direct = [('ORDER_D_NO', 'external_id'),
               ('ITEM_NAME', 'name'),
-              ('SHIRE_PRICE', 'price_unit'),
-              ('QUANTITY', 'product_qty')]
+              ('TEIKA', 'price_unit'),
+              ('QUANTITY', 'product_uom_qty')]
     
     @mapping
     def product(self, record):
@@ -49,17 +49,17 @@ class PurchaseOrderLineMapper(Component):
         product = binder.to_internal(record['ITEM_ID'], unwrap=True)
         assert product, (
             "product_id %s should have been imported in "
-            "PurchaseOrderImporter._import_dependencies" % record['ITEM_ID'])
+            "SaleOrderImporter._import_dependencies" % record['ITEM_ID'])
         return {'product_id': product.id, 'product_uom': product.uom_id.id}
 
     @mapping
     def date_planned(self, record):
         return {'date_planned': fields.Datetime.now()}
 
-class PurchaseOrderBatchImporter(Component):
-    _name = 'ebisumart.purchase.order.batch.importer'
+class SaleOrderBatchImporter(Component):
+    _name = 'ebisumart.sale.order.batch.importer'
     _inherit = 'ebisumart.delayed.batch.importer'
-    _apply_on = ['ebisumart.purchase.order']
+    _apply_on = ['ebisumart.sale.order']
 
     def run(self, filters=None):
         """ Run the synchronization """
@@ -68,10 +68,10 @@ class PurchaseOrderBatchImporter(Component):
         for external_id in external_ids:
             self._import_record(external_id)
 
-class EbisumartPurchaseOrderImporter(Component):
-    _name = 'ebisumart.purchase.order.importer'
+class EbisumartSaleOrderImporter(Component):
+    _name = 'ebisumart.sale.order.importer'
     _inherit = 'ebisumart.importer'
-    _apply_on = 'ebisumart.purchase.order'
+    _apply_on = 'ebisumart.sale.order'
 
     def _import_dependencies(self):
         record = self.ebisumart_record
