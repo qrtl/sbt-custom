@@ -14,7 +14,6 @@ class EbisumartProduct(models.Model):
                              required=True, ondelete='cascade')
     created_at = fields.Date('Created At (on Ebisumart)')
     updated_at = fields.Date('Updated At (on Ebisumart)')
-    torihikisaki_id = fields.Integer("Partner ID on ebisumart", readonly=True, store=True)
 
 class ProductProduct(models.Model):
     _inherit = 'product.product'
@@ -24,6 +23,7 @@ class ProductProduct(models.Model):
         inverse_name='odoo_id',
         string='Ebisumart Bindings',
     )
+    torihikisaki_id = fields.Integer("Partner ID on ebisumart", readonly=True, store=True)
 
 class ProductAdapter(Component):
     _name = 'ebisumart.product.adapter'
@@ -41,6 +41,6 @@ class ProductAdapter(Component):
         """ Returns the detailed information for an existing product."""
         # Adjust the URL endpoint accordingly
         if not attributes:
-            attributes = ['ITEM_NAME','ITEM_ID', 'ITEM_CD', 'TEIKA', 'SHIRE_PRICE', 'REGIST_DATE', 'UPDATE_DATE']  # Define default attributes to fetch
+            attributes = ['ITEM_NAME','ITEM_ID', 'ITEM_CD', 'TEIKA', 'TORIHIKISAKI_ID', 'SHIRE_PRICE', 'REGIST_DATE', 'UPDATE_DATE']  # Define default attributes to fetch
         return super().read(f"/items/{external_id}", attributes=attributes)
 

@@ -25,8 +25,8 @@ class SaleOrderImportMapper(Component):
         for line in record.get('order_details', []):
             binder = self.binder_for('ebisumart.product.product')
             product = binder.to_internal(line['ITEM_ID'], unwrap=True)
-            if product:
-                partner = self.env["res.partner"].search([('customer','=',True)],limit=1)
+            if product and product.torihikisaki_id != 0:
+                partner = self.env["res.partner"].search([('ebisumart_id','=', product.torihikisaki_id),('customer','=',True)],limit=1)
                 return {'partner_id': partner.id}
 
     @mapping
@@ -46,7 +46,7 @@ class SaleOrderLineMapper(Component):
     @mapping
     def product(self, record):
         binder = self.binder_for('ebisumart.product.product')
-        product = binder.to_internal(record['ITEM_ID'], unwrap=True)
+        product = binder.to_internal(record['ITEM_ID'],unwrap=True)
         assert product, (
             "product_id %s should have been imported in "
             "SaleOrderImporter._import_dependencies" % record['ITEM_ID'])
@@ -61,10 +61,48 @@ class SaleOrderBatchImporter(Component):
     _inherit = 'ebisumart.delayed.batch.importer'
     _apply_on = ['ebisumart.sale.order']
 
+    def create_return_delivery(self, sale_order):
+        for delivery in sale_order.picking_ids.filtered(lambda r: r.state == 'done'):
+            # Create the reverse transfer (return delivery)
+            stock_return_picking = self.env['stock.return.picking']
+            return_wizard = stock_return_picking.with_context(active_ids=delivery.ids, active_id=delivery.ids[0]).create({})
+            return_wizard.create_returns()
+        
+    def create_credit_note(self, sale_order):
+        for invoice in sale_order.invoice_ids.filtered(lambda r: r.state not in ['cancel','draft'] and r.type == 'out_invoice'):
+            # Create the refund (credit note)
+            account_invoice_refund = self.env['account.invoice.refund']
+            refund_wizard = account_invoice_refund.create({
+                'description': 'Credit Note',
+                'filter_refund': 'refund',  # refund the entire invoice
+            })
+            refund_wizard.with_context(active_ids=invoice.ids).invoice_refund()
+
     def run(self, filters=None):
         """ Run the synchronization """
         external_datas = self.backend_adapter.search(filters)
-        external_ids = [order["ORDER_NO"] for order in external_datas if order['ORDER_DISP_NO'] and order['AUTHORY_DATE'] and order['SEND_DATE']]
+        external_ids = [
+            order["ORDER_NO"]
+            for order in external_datas
+            if order.get('ORDER_DISP_NO') and
+            order.get('AUTHORY_DATE') and
+            order.get('SEND_DATE') and 
+            not order.get('CANCEL_DATE')
+        ]
+        cancel_ids = [
+            order["ORDER_NO"]
+            for order in external_datas
+            if order.get('CANCEL_DATE')
+        ]
+        for external_id in cancel_ids:
+            binder = self.binder_for('ebisumart.sale.order')
+            sale_order = binder.to_internal(external_id, unwrap=True)
+            if sale_order:
+                if sale_order.cancel_in_ebisumart:
+                    continue
+                self.create_return_delivery(sale_order)
+                self.create_credit_note(sale_order)
+                sale_order.write({"cancel_in_ebisumart": True})
         for external_id in external_ids:
             self._import_record(external_id)
 

@@ -30,6 +30,7 @@ class SaleOrder(models.Model):
         inverse_name='odoo_id',
         string='Ebisumart Bindings',
     )
+    cancel_in_ebisumart = fields.Boolean()
 
 class EbisumartsaleOrderLine(models.Model):
     _name = 'ebisumart.sale.order.line'
@@ -71,7 +72,7 @@ class ProductAdapter(Component):
 
     def search(self, attributes=None, filters=None):
         # Call the base method with the "/orders" endpoint
-        attributes = ['ORDER_NO','KESSAI_ID','ORDER_DISP_NO','AUTHORY_DATE','SEND_DATE']
+        attributes = ['ORDER_NO','KESSAI_ID','ORDER_DISP_NO','AUTHORY_DATE','SEND_DATE','CANCEL_DATE']
         filters = [
             {
                 "column":"KESSAI_ID",

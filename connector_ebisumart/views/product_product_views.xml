@@ -11,6 +11,7 @@
             </page>
             <page name="connector" position="inside">
                 <group string="Ebisumart Bindings">
+                    <field name="torihikisaki_id" />
                     <field name="ebisumart_bind_ids" nolabel="1">
                         <tree>
                             <field name="backend_id"/>
@@ -31,7 +32,6 @@
                     <field name="external_id"/>
                     <field name="created_at" readonly="1"/>
                     <field name="updated_at" readonly="1"/>
-                    <field name="torihikisaki_id" />
                 </group>
             </form>
         </field>

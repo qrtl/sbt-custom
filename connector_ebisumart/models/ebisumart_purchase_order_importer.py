@@ -5,7 +5,7 @@ from odoo.addons.component.core import Component
 from odoo.addons.connector.components.mapper import mapping
 from ..components.mapper import normalize_datetime
 from odoo import fields
-import logging
+
 
 class PurchaseOrderImportMapper(Component):
     _name = 'ebisumart.purchase.order.import.mapper'
@@ -26,10 +26,13 @@ class PurchaseOrderImportMapper(Component):
         for line in record.get('order_details', []):
             binder = self.binder_for('ebisumart.product.product')
             product = binder.to_internal(line['ITEM_ID'], unwrap=True)
-            if product:
-                partner = self.env["res.partner"].search([('supplier','=',True)],limit=1)
-                return {'partner_id': partner.id}
-
+            if product and product.torihikisaki_id != 0:
+                partner = self.env["res.partner"].search([('ebisumart_id','=', product.torihikisaki_id),('supplier','=',True)],limit=1)
+                sales_partner = self.env["res.partner"].search([('ebisumart_id','=', product.torihikisaki_id),('customer','=',True)],limit=1)
+                partner.write({'sales_partner': sales_partner.id})
+                if partner:
+                    return {'partner_id': partner.id}
+        return {}
     @mapping
     def backend_id(self, record):
         return {'backend_id': self.backend_record.id}
@@ -70,7 +73,8 @@ class PurchaseOrderBatchImporter(Component):
             for order in external_datas
             if order.get('ORDER_DISP_NO') and
             order.get('AUTHORY_DATE') and
-            order.get('SEND_DATE')
+            order.get('SEND_DATE') and 
+            not order.get('CANCEL_DATE')
         ]
         for external_id in external_ids:
             self._import_record(external_id)
