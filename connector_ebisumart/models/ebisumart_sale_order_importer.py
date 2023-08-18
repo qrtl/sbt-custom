@@ -52,10 +52,6 @@ class SaleOrderLineMapper(Component):
             "SaleOrderImporter._import_dependencies" % record['ITEM_ID'])
         return {'product_id': product.id, 'product_uom': product.uom_id.id}
 
-    @mapping
-    def date_planned(self, record):
-        return {'date_planned': fields.Datetime.now()}
-
 class SaleOrderBatchImporter(Component):
     _name = 'ebisumart.sale.order.batch.importer'
     _inherit = 'ebisumart.delayed.batch.importer'

@@ -59,6 +59,7 @@ class EbisumartPurchaseOrderLine(models.Model):
         ebisumart_order_id = vals['ebisumart_order_id']
         binding = self.env['ebisumart.purchase.order'].browse(ebisumart_order_id)
         vals['order_id'] = binding.odoo_id.id
+        vals['date_planned'] = binding.odoo_id.date_order
         binding = super(EbisumartPurchaseOrderLine, self).create(vals)
         return binding
     
