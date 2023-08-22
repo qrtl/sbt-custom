@@ -6,10 +6,11 @@
     "website": "https://www.quartile.co",
     "category": "Connector",
     "license": "AGPL-3",
-    "depends": ["purchase", "connector_ecommerce"],
+    "depends": ["purchase", "connector_ecommerce", "sale_order_journal"],
     "data": [
         "security/ir.model.access.csv",
         "data/scheduler.xml",
+        "views/account_journal_views.xml",
         "views/ebisumart_backend_views.xml",
         # "views/product_category_views.xml",
         "views/product_product_views.xml",

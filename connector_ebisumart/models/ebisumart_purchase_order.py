@@ -3,7 +3,7 @@
 
 from odoo.addons.component.core import Component
 from odoo import fields, models, api
-
+import logging
 
 class EbisumartPurchaseOrder(models.Model):
     _name = 'ebisumart.purchase.order'
@@ -30,6 +30,27 @@ class PurchaseOrder(models.Model):
         inverse_name='odoo_id',
         string='Ebisumart Bindings',
     )
+    cancel_in_ebisumart = fields.Boolean()
+
+    def _after_import(self): 
+        # Confirm the purchase order.
+        self.button_confirm()
+
+        # Validate the associated receipt (stock picking).
+        for picking in self.picking_ids:
+            wiz = self.env['stock.immediate.transfer'].create({'pick_ids': [(4, picking.id)]})
+            wiz.process()
+        po_invoice = {
+            'partner_id': self.partner_id.id,
+            'account_id': self.partner_id.property_account_payable_id.id,
+            'state': 'draft',
+            'type': 'in_invoice',
+            'purchase_id': self.id,
+        }
+
+        inv = self.env['account.invoice'].create(po_invoice)
+        inv.purchase_order_change()
+        inv.action_invoice_open()
 
 class EbisumartPurchaseOrderLine(models.Model):
     _name = 'ebisumart.purchase.order.line'
@@ -73,13 +94,6 @@ class ProductAdapter(Component):
     def search(self, attributes=None, filters=None):
         # Call the base method with the "/orders" endpoint
         attributes = ['ORDER_NO','KESSAI_ID','ORDER_DISP_NO','AUTHORY_DATE','SEND_DATE','CANCEL_DATE']
-        filters = [
-            {
-                "column":"KESSAI_ID",
-                "operator":"equals",
-                "value": 61,
-        }
-        ]
         return super().search("/orders", attributes=attributes, filters=filters)
 
     def read(self, external_id, attributes=None):

@@ -4,7 +4,6 @@
 from odoo.addons.component.core import Component
 from odoo.addons.connector.components.mapper import mapping
 from ..components.mapper import normalize_datetime
-from odoo import fields
 
 
 class SaleOrderImportMapper(Component):
@@ -29,6 +28,25 @@ class SaleOrderImportMapper(Component):
                 partner = self.env["res.partner"].search([('ebisumart_id','=', product.torihikisaki_id),('customer','=',True)],limit=1)
                 return {'partner_id': partner.id}
 
+    @mapping
+    def journal_id(self, record):
+        if record['KESSAI_ID'] == 61:
+            journal = self.env["account.journal"].search([("ebisumart_payment_type", "=", "credit_card")],limit=1)
+            if journal:
+                return {'journal_id': journal.id}
+        else:
+            journal = self.env["account.journal"].search([("ebisumart_payment_type", "=", "payment_slip")],limit=1)
+            if journal:
+                return {'journal_id': journal.id}
+        return
+    
+    # TODO
+    # To search process id with some identifier, not name
+    @mapping
+    def workflow_process_id(self, record):
+        workflow_process_id = self.env["sale.workflow.process"].search([("name", "=", "Automatic")],limit=1)
+        return {'workflow_process_id': workflow_process_id.id}
+    
     @mapping
     def backend_id(self, record):
         return {'backend_id': self.backend_record.id}

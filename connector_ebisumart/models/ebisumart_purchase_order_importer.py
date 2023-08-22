@@ -55,12 +55,29 @@ class PurchaseOrderLineMapper(Component):
             "product_id %s should have been imported in "
             "PurchaseOrderImporter._import_dependencies" % record['ITEM_ID'])
         return {'product_id': product.id, 'product_uom': product.uom_id.id}
-
+    
 
 class PurchaseOrderBatchImporter(Component):
     _name = 'ebisumart.purchase.order.batch.importer'
     _inherit = 'ebisumart.delayed.batch.importer'
     _apply_on = ['ebisumart.purchase.order']
+
+    def create_return_receipt(self, purchase_order):
+        for receipt in purchase_order.picking_ids.filtered(lambda r: r.state == 'done'):
+            # Create the reverse transfer (return receipt)
+            stock_return_picking = self.env['stock.return.picking']
+            return_wizard = stock_return_picking.with_context(active_ids=receipt.ids, active_id=receipt.ids[0]).create({})
+            return_wizard.create_returns()
+        
+    def create_vendor_credit_note(self, purchase_order):
+        for invoice in purchase_order.invoice_ids.filtered(lambda r: r.state not in ['cancel','draft'] and r.type == 'in_invoice'):
+            # Create the refund (vendor credit note)
+            account_invoice_refund = self.env['account.invoice.refund']
+            refund_wizard = account_invoice_refund.create({
+                'description': 'Credit Note',
+                'filter_refund': 'refund',  # refund the entire invoice
+            })
+            refund_wizard.with_context(active_ids=invoice.ids).invoice_refund()
 
     def run(self, filters=None):
         """ Run the synchronization """
@@ -73,6 +90,20 @@ class PurchaseOrderBatchImporter(Component):
             order.get('SEND_DATE') and 
             not order.get('CANCEL_DATE')
         ]
+        cancel_ids = [
+            order["ORDER_NO"]
+            for order in external_datas
+            if order.get('CANCEL_DATE')
+        ]
+        for external_id in cancel_ids:
+            binder = self.binder_for('ebisumart.purchase.order')
+            purchase_order = binder.to_internal(external_id, unwrap=True)
+            if purchase_order:
+                if purchase_order.cancel_in_ebisumart:
+                    continue
+                self.create_return_receipt(purchase_order)
+                self.create_vendor_credit_note(purchase_order)
+                purchase_order.write({"cancel_in_ebisumart": True})
         for external_id in external_ids:
             self._import_record(external_id)
 
@@ -85,3 +116,6 @@ class EbisumartPurchaseOrderImporter(Component):
         record = self.ebisumart_record
         for line in record.get('order_details', []):
             self._import_dependency(line['ITEM_ID'], 'ebisumart.product.product')
+
+    def _after_import(self, binding):
+        binding.odoo_id._after_import()

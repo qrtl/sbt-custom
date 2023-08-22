@@ -101,6 +101,10 @@ class EbisumartImporter(AbstractComponent):
         _logger.debug('%d updated from ebisumart %s', binding, self.external_id)
         return
     
+    def _after_import(self, binding):
+        """ Hook called at the end of the import """
+        return
+    
     def run(self, external_id, force=False, data=None):
         """ Run the synchronization
 
@@ -144,7 +148,7 @@ class EbisumartImporter(AbstractComponent):
             binding = self._create(record)
 
         self.binder.bind(self.external_id, binding)
-
+        self._after_import(binding)
 
 class BatchImporter(AbstractComponent):
     """ The role of a BatchImporter is to search for a list of
