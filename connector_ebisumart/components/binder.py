@@ -21,4 +21,5 @@ class EbisumarttoModelBinder(Component):
         'ebisumart.purchase.order.line',
         'ebisumart.sale.order',
         'ebisumart.sale.order.line',
+        'ebisumart.res.partner',
     ]

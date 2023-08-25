@@ -33,6 +33,8 @@ class PurchaseOrder(models.Model):
     cancel_in_ebisumart = fields.Boolean()
 
     def _after_import(self): 
+        if self.state == 'purchase':
+            return
         # Confirm the purchase order.
         self.button_confirm()
 
@@ -93,7 +95,7 @@ class ProductAdapter(Component):
 
     def search(self, attributes=None, filters=None):
         # Call the base method with the "/orders" endpoint
-        attributes = ['ORDER_NO','KESSAI_ID','ORDER_DISP_NO','AUTHORY_DATE','SEND_DATE','CANCEL_DATE']
+        attributes = ['ORDER_NO','KESSAI_ID','ORDER_DISP_NO','AUTHORY_DATE','SEND_DATE','CANCEL_DATE','FREE_ITEM1']
         return super().search("/orders", attributes=attributes, filters=filters)
 
     def read(self, external_id, attributes=None):

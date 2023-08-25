@@ -54,3 +54,8 @@ class EbisumartProductImporter(Component):
     _name = 'ebisumart.product.product.importer'
     _inherit = 'ebisumart.importer'
     _apply_on = 'ebisumart.product.product'
+
+    def _import_dependencies(self):
+        record = self.ebisumart_record
+        if record.get("TORIHIKISAKI_ID"):
+            self._import_dependency(record['TORIHIKISAKI_ID'], 'ebisumart.res.partner')

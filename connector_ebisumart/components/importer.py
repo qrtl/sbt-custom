@@ -104,7 +104,7 @@ class EbisumartImporter(AbstractComponent):
     def _after_import(self, binding):
         """ Hook called at the end of the import """
         return
-    
+
     def run(self, external_id, force=False, data=None):
         """ Run the synchronization
 
@@ -124,12 +124,12 @@ class EbisumartImporter(AbstractComponent):
                 self.ebisumart_record = self._get_ebisumart_data()
             except IDMissingInBackend:
                 return _('Record does no longer exist in Ebisumart')
-
+        
         binding = self._get_binding()
 
         if not force and self._is_uptodate(binding):
             return _('Already up-to-date.')
-
+        
         # Keep a lock on this import until the transaction is committed
         # The lock is kept since we have detected that the informations
         # will be updated into Odoo

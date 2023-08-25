@@ -102,7 +102,8 @@ class SaleOrderBatchImporter(Component):
             for order in external_datas
             if order.get('ORDER_DISP_NO') and
             order.get('AUTHORY_DATE') and
-            order.get('SEND_DATE') and 
+            order.get('SEND_DATE') and
+            order.get('FREE_ITEM1') and
             not order.get('CANCEL_DATE')
         ]
         cancel_ids = [

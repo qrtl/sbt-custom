@@ -4,7 +4,6 @@
 from odoo.addons.component.core import Component
 from odoo.addons.connector.components.mapper import mapping
 from ..components.mapper import normalize_datetime
-from odoo import fields
 
 
 class PurchaseOrderImportMapper(Component):
@@ -33,6 +32,7 @@ class PurchaseOrderImportMapper(Component):
                 if partner:
                     return {'partner_id': partner.id}
         return {}
+    
     @mapping
     def backend_id(self, record):
         return {'backend_id': self.backend_record.id}
@@ -46,6 +46,11 @@ class PurchaseOrderLineMapper(Component):
               ('ITEM_NAME', 'name'),
               ('SHIRE_PRICE', 'price_unit'),
               ('QUANTITY', 'product_qty')]
+    
+    
+    @mapping
+    def name(self, record):
+        return {'name': 'P_' + record['ITEM_NAME']}
     
     @mapping
     def product(self, record):
@@ -104,6 +109,7 @@ class PurchaseOrderBatchImporter(Component):
             if order.get('ORDER_DISP_NO') and
             order.get('AUTHORY_DATE') and
             order.get('SEND_DATE') and 
+            order.get('FREE_ITEM1') and
             not order.get('CANCEL_DATE')
         ]
         cancel_ids = [
