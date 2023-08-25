@@ -67,7 +67,16 @@ class PurchaseOrderBatchImporter(Component):
             # Create the reverse transfer (return receipt)
             stock_return_picking = self.env['stock.return.picking']
             return_wizard = stock_return_picking.with_context(active_ids=receipt.ids, active_id=receipt.ids[0]).create({})
-            return_wizard.create_returns()
+            return_result = return_wizard.create_returns()
+
+            # Usually, the return_result contains information about the newly created return picking(s)
+            if return_result and 'res_id' in return_result:
+                new_return_picking = self.env['stock.picking'].browse(return_result['res_id'])
+
+                # Validate (confirm) the return picking
+                if new_return_picking.state != 'done':
+                    wiz = self.env['stock.immediate.transfer'].create({'pick_ids': [(4, new_return_picking.id)]})
+                    wiz.process()
         
     def create_vendor_credit_note(self, purchase_order):
         for invoice in purchase_order.invoice_ids.filtered(lambda r: r.state not in ['cancel','draft'] and r.type == 'in_invoice'):

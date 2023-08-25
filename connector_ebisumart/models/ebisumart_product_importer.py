@@ -31,6 +31,10 @@ class ProductImportMapper(Component):
             return {'odoo_id': product.id}
 
     @mapping
+    def invoice_policy(self, record):
+        return {'invoice_policy': 'delivery'}
+    
+    @mapping
     def backend_id(self, record):
         return {'backend_id': self.backend_record.id}
 
