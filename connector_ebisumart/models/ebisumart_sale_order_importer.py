@@ -90,7 +90,13 @@ class SaleOrderBatchImporter(Component):
                 'description': 'Credit Note',
                 'filter_refund': 'refund',  # refund the entire invoice
             })
-            refund_wizard.with_context(active_ids=invoice.ids).invoice_refund()
+            refund_result = refund_wizard.with_context(active_ids=invoice.ids).invoice_refund()
+            if refund_result and refund_result.get('domain'):
+                # Search for the newly created credit note
+                credit_notes = self.env['account.invoice'].search(refund_result.get('domain'))
+                for credit_note in credit_notes:
+                    if credit_note.state == 'draft':
+                        credit_note.action_invoice_open()
 
     def run(self, filters=None):
         """ Run the synchronization """
@@ -119,6 +125,7 @@ class SaleOrderBatchImporter(Component):
                 sale_order.write({"cancel_in_ebisumart": True})
         for external_id in external_ids:
             self._import_record(external_id)
+
 
 class EbisumartSaleOrderImporter(Component):
     _name = 'ebisumart.sale.order.importer'
