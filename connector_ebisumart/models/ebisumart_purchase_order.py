@@ -3,7 +3,7 @@
 
 from odoo.addons.component.core import Component
 from odoo import fields, models, api
-import logging
+
 
 class EbisumartPurchaseOrder(models.Model):
     _name = 'ebisumart.purchase.order'

@@ -71,9 +71,8 @@ class EbisumartAdapater(AbstractComponent):
         page = 1
 
         while True:
-            params = {"page": page}
             params = {"result_count": 100}
-
+            params["page"] = page
             if attributes:
                 params["select"] = ",".join(attributes)
 
