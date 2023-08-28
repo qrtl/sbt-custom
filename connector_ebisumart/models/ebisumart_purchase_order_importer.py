@@ -13,13 +13,16 @@ class PurchaseOrderImportMapper(Component):
 
     direct = [
         ("ORDER_NO", "external_id"),
-        ("ORDER_DISP_NO", "name"),
         (normalize_datetime('SEND_DATE'), 'date_order'),
         (normalize_datetime('REGIST_DATE'), 'created_at'),
         (normalize_datetime('UPDATE_DATE'), 'updated_at'),
     ]
     children = [('order_details', 'ebisumart_order_line_ids', 'ebisumart.purchase.order.line')]
 
+    @mapping
+    def name(self, record):
+        return {'name': 'P_' + record['ORDER_DISP_NO']}
+    
     @mapping
     def partner_id(self, record):
         for line in record.get('order_details', []):
@@ -47,10 +50,6 @@ class PurchaseOrderLineMapper(Component):
               ('SHIRE_PRICE', 'price_unit'),
               ('QUANTITY', 'product_qty')]
     
-    
-    @mapping
-    def name(self, record):
-        return {'name': 'P_' + record['ITEM_NAME']}
     
     @mapping
     def product(self, record):
