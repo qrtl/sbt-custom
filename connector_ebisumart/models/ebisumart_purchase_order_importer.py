@@ -49,8 +49,7 @@ class PurchaseOrderLineMapper(Component):
               ('ITEM_NAME', 'name'),
               ('SHIRE_PRICE', 'price_unit'),
               ('QUANTITY', 'product_qty')]
-    
-    
+       
     @mapping
     def product(self, record):
         binder = self.binder_for('ebisumart.product.product')
