@@ -17,6 +17,10 @@ class ResPartnerMapper(Component):
     ]
     
     @mapping
+    def company_type(self, record):
+        return {'company_type': 'company'}
+    
+    @mapping
     def ref(self, record):
         return {'ref': record['TORIHIKISAKI_CD'] + '_S'}
 
