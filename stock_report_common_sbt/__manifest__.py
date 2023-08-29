@@ -6,7 +6,7 @@
     "version": "12.0.1.0.0",
     "category": "Warehouse",
     "author": "SB Technology Corp., Quartile Limited",
-    "website": "https://www.quartile.co/",
+    "website": "https://www.quartile.co",
     "license": "AGPL-3",
     "depends": ["base"],
     "data": [],
