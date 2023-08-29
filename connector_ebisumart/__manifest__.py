@@ -9,10 +9,10 @@
     "depends": ["purchase", "connector_ecommerce", "sale_order_journal"],
     "data": [
         "security/ir.model.access.csv",
+        "data/automatic_workflow_data.xml",
         "data/scheduler.xml",
         "views/account_journal_views.xml",
         "views/ebisumart_backend_views.xml",
-        # "views/product_category_views.xml",
         "views/product_product_views.xml",
         "views/connector_ebisumart_menu_views.xml",
         "views/res_partner_views.xml",

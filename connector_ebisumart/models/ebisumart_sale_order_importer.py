@@ -56,7 +56,7 @@ class SaleOrderImportMapper(Component):
     @mapping
     def workflow_process_id(self, record):
         workflow_process_id = self.env["sale.workflow.process"].search(
-            [("name", "=", "Automatic")], limit=1
+            [("name", "=", "Ebisumart Sale Automatic")], limit=1
         )
         return {'workflow_process_id': workflow_process_id.id}
 
