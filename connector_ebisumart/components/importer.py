@@ -8,6 +8,8 @@ from odoo import _, fields
 from odoo.addons.component.core import AbstractComponent
 from odoo.addons.connector.exception import IDMissingInBackend
 from odoo.addons.queue_job.exception import NothingToDoJob
+from datetime import datetime
+import pytz
 
 _logger = logging.getLogger(__name__)
 
@@ -47,6 +49,31 @@ class EbisumartImporter(AbstractComponent):
     def _get_binding(self):
         return self.binder.to_internal(self.external_id)
 
+    def convert_ebisumart_date_to_utc(self, raw_date):
+        """
+        Convert an Ebisumart date (assumed to be in user's timezone) 
+        to offset-naive UTC datetime object.
+        """
+        # If the date is invalid, return None
+        if raw_date == '0000-00-00 00:00:00':
+            return None
+
+        # Handle datetime strings that might have milliseconds
+        try:
+            naive_dt = datetime.strptime(raw_date, "%Y-%m-%d %H:%M:%S.%f")
+        except ValueError:
+            naive_dt = datetime.strptime(raw_date, "%Y-%m-%d %H:%M:%S")
+
+        # Assume the naive datetime is in the user's timezone
+        user_timezone = pytz.timezone(self.env.user.tz)
+        aware_dt = user_timezone.localize(naive_dt)
+
+        # Convert the timezone-aware datetime to UTC
+        utc_dt = aware_dt.astimezone(pytz.UTC)
+
+        # Return offset-naive UTC datetime
+        return utc_dt.replace(tzinfo=None)
+    
     def _is_uptodate(self, binding):
         """Return True if the import should be skipped because
         it is already up-to-date in Odoo"""
@@ -60,7 +87,7 @@ class EbisumartImporter(AbstractComponent):
             return
         from_string = fields.Datetime.from_string
         sync_date = from_string(sync)
-        ebisumart_date = from_string(self.ebisumart_record['UPDATE_DATE'])
+        ebisumart_date = self.convert_ebisumart_date_to_utc(self.ebisumart_record['UPDATE_DATE'])
         return ebisumart_date < sync_date
 
     def _import_dependency(self, external_id, binding_model,
