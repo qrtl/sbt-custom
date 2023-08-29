@@ -6,7 +6,11 @@
     "website": "https://www.quartile.co",
     "category": "Connector",
     "license": "AGPL-3",
-    "depends": ["purchase", "connector_ecommerce", "sale_order_journal"],
+    "depends": [
+        "purchase",
+        "connector_ecommerce",
+        "sale_order_journal",
+    ],
     "data": [
         "security/ir.model.access.csv",
         "data/automatic_workflow_data.xml",
