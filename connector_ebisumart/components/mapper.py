@@ -9,6 +9,7 @@ class EbisumartImportMapper(AbstractComponent):
     _inherit = ['base.ebisumart.connector', 'base.import.mapper']
     _usage = 'import.mapper'
 
+
 def normalize_datetime(field):
     """Change a invalid date which comes from Ebisumart, if
     no real date is set to null for correct import to

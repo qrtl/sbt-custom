@@ -36,6 +36,7 @@ class EbisumartCRUDAdapter(AbstractComponent):
         """ Delete a record on the external system """
         raise NotImplementedError
 
+
 class EbisumartAdapater(AbstractComponent):
     _name = "ebisumart.adapter"
     _inherit = "ebisumart.crud.adapter"
@@ -46,7 +47,10 @@ class EbisumartAdapater(AbstractComponent):
     def _generate_api_url(self, endpoint, params=None):
         """Generate the complete API URL using the given endpoint and params."""
         backend = self._get_backend()
-        url = f"{backend.ebisumart_api_url}/{backend.ebisumart_number}/dataaccess{endpoint}.json"
+        url = (
+            f"{backend.ebisumart_api_url}/{backend.ebisumart_number}"
+            f"/dataaccess{endpoint}.json"
+        )
         return url
 
     def _generate_headers(self):
@@ -103,7 +107,7 @@ class EbisumartAdapater(AbstractComponent):
         external_id: The ID of the record in Ebisumart.
         attributes: A list of attributes to select.
         """
-        params ={}
+        params = {}
         if attributes:
             params["select"] = ",".join(attributes)
         return self._fetch_data(external_id, params)

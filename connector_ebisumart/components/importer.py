@@ -60,7 +60,7 @@ class EbisumartImporter(AbstractComponent):
             return
         from_string = fields.Datetime.from_string
         sync_date = from_string(sync)
-        ebisumart_date = from_string(self.ebisumart_record['UPDATE_DATE']) # To Replace updated_at
+        ebisumart_date = from_string(self.ebisumart_record['UPDATE_DATE'])
         return ebisumart_date < sync_date
 
     def _import_dependency(self, external_id, binding_model,
@@ -79,7 +79,6 @@ class EbisumartImporter(AbstractComponent):
                     'Dependency import of %s(%s) has been ignored.',
                     binding_model._name, external_id
                 )
-
 
     def _import_dependencies(self):
         """ Import the dependencies for the record
@@ -152,6 +151,7 @@ class EbisumartImporter(AbstractComponent):
         self.binder.bind(self.external_id, binding)
         self._after_import(binding)
 
+
 class BatchImporter(AbstractComponent):
     """ The role of a BatchImporter is to search for a list of
     items to import, then it can either import them directly or delay
@@ -175,6 +175,7 @@ class BatchImporter(AbstractComponent):
         """
         raise NotImplementedError
 
+
 class DirectBatchImporter(AbstractComponent):
     """ Import the records directly, without delaying the jobs. """
 
@@ -184,6 +185,7 @@ class DirectBatchImporter(AbstractComponent):
     def _import_record(self, external_id):
         """ Import the record directly """
         self.model.import_record(self.backend_record, external_id)
+
 
 class DelayedBatchImporter(AbstractComponent):
     """ Delay import of the records """

@@ -12,7 +12,12 @@ class EbisumartProduct(models.Model):
     _inherits = {'product.product': 'odoo_id'}
     _description = 'Ebisumart Product'
 
-    odoo_id = fields.Many2one(comodel_name='product.product', string='Product', required=True, ondelete='cascade')
+    odoo_id = fields.Many2one(
+        comodel_name='product.product',
+        string='Product',
+        required=True,
+        ondelete='cascade'
+    )
     created_at = fields.Date('Created At (on Ebisumart)')
     updated_at = fields.Date('Updated At (on Ebisumart)')
 
@@ -25,7 +30,9 @@ class ProductProduct(models.Model):
         inverse_name='odoo_id',
         string='Ebisumart Bindings',
     )
-    torihikisaki_id = fields.Integer("Partner ID on ebisumart", readonly=True, store=True)
+    torihikisaki_id = fields.Integer(
+        "Partner ID on ebisumart", readonly=True, store=True
+    )
 
 
 class ProductAdapter(Component):
@@ -44,5 +51,8 @@ class ProductAdapter(Component):
         """ Returns the detailed information for an existing product."""
         # Adjust the URL endpoint accordingly
         if not attributes:
-            attributes = ['ITEM_NAME','ITEM_ID', 'ITEM_CD', 'TEIKA', 'TORIHIKISAKI_ID', 'SHIRE_PRICE', 'REGIST_DATE', 'UPDATE_DATE']  # Define default attributes to fetch
+            attributes = [
+                'ITEM_NAME', 'ITEM_ID', 'ITEM_CD', 'TEIKA', 'TORIHIKISAKI_ID',
+                'SHIRE_PRICE', 'REGIST_DATE', 'UPDATE_DATE'
+            ]
         return super().read(f"/items/{external_id}", attributes=attributes)

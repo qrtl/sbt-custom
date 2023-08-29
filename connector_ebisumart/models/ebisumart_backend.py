@@ -35,7 +35,10 @@ class EbisumartBackend(models.Model):
         root_url = self.root_ebisumart_url
         root_url += "/" + self.ebisumart_number + "/admin_authorize.html"
         redirect_uri = self.redirect_uri
-        authorize_url = f"{root_url}?scope=item privacy system&response_type=code&redirect_uri={redirect_uri}&client_id={self.app_code}"
+        authorize_url = (
+            f"{root_url}?scope=item privacy system&response_type=code"
+            f"&redirect_uri={redirect_uri}&client_id={self.app_code}"
+        )
         return authorize_url
 
     def open_authorization_url(self):
@@ -53,12 +56,18 @@ class EbisumartBackend(models.Model):
     def get_token(self, auth_code):
         """Retrieve token"""
         # Define the API Endpoint
-        oauth_url = f"{self.ebisumart_access_url}/{self.ebisumart_number}/app_oauth/access_token.html"
+        oauth_url = (
+            f"{self.ebisumart_access_url}/{self.ebisumart_number}"
+            f"/app_oauth/access_token.html"
+        )
 
         # Define the Headers
+        auth_string = (self.app_code + ':' + self.password).encode()
+        encoded_auth_string = base64.b64encode(auth_string).decode()
+
         headers = {
             'Content-Type': 'application/x-www-form-urlencoded',
-            'Authorization': 'Basic ' + base64.b64encode((self.app_code + ':' + self.password).encode()).decode()
+            'Authorization': f'Basic {encoded_auth_string}'
         }
 
         # Define the payload
@@ -80,7 +89,9 @@ class EbisumartBackend(models.Model):
             # Save the token in the backend record
             self.access_token = response_data['access_token']
             self.refresh_token = response_data['refresh_token']
-            expiry_time = datetime.now() + timedelta(seconds=response_data['expires_in'])
+            expiry_time = datetime.now() + timedelta(
+                seconds=response_data['expires_in']
+            )
             self.token_expiration = expiry_time.strftime('%Y-%m-%d %H:%M:%S')
             self.shop_id = response_data['shop_id']
         else:
@@ -91,12 +102,18 @@ class EbisumartBackend(models.Model):
         """Refresh the token"""
         # Check if the token is expired
         backend = self.env['ebisumart.backend'].sudo().search([])[0]
-        oauth_url = f"{backend.ebisumart_access_url}/{backend.ebisumart_number}/app_oauth/access_token.html"
+        oauth_url = (
+            f"{backend.ebisumart_access_url}/{backend.ebisumart_number}"
+            f"/app_oauth/access_token.html"
+        )
 
         # Define the Headers
+        auth_string = (backend.app_code + ':' + backend.password).encode()
+        encoded_auth_string = base64.b64encode(auth_string).decode()
+
         headers = {
             'Content-Type': 'application/x-www-form-urlencoded',
-            'Authorization': 'Basic ' + base64.b64encode((backend.app_code + ':' + backend.password).encode()).decode()
+            'Authorization': 'Basic ' + encoded_auth_string
         }
 
         # Define the payload
@@ -116,7 +133,9 @@ class EbisumartBackend(models.Model):
 
             # Save the token in the backend record
             backend.access_token = response_data['access_token']
-            expiry_time = datetime.now() + timedelta(seconds=response_data['expires_in'])
+            expiry_time = datetime.now() + timedelta(
+                seconds=response_data['expires_in']
+            )
             backend.token_expiration = expiry_time.strftime('%Y-%m-%d %H:%M:%S')
         else:
             # TODO: Handle the error case
