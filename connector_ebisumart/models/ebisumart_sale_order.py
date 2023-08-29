@@ -1,8 +1,9 @@
 # Copyright 2023 Quartile Limited
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
+from odoo import api, fields, models
+
 from odoo.addons.component.core import Component
-from odoo import fields, models, api
 
 
 class EbisumartSaleOrder(models.Model):
@@ -32,6 +33,7 @@ class SaleOrder(models.Model):
     )
     cancel_in_ebisumart = fields.Boolean()
 
+
 class EbisumartsaleOrderLine(models.Model):
     _name = 'ebisumart.sale.order.line'
     _inherit = 'ebisumart.binding'
@@ -54,7 +56,7 @@ class EbisumartsaleOrderLine(models.Model):
         store=True,
         required=False,
     )
-    
+
     @api.model
     def create(self, vals):
         ebisumart_order_id = vals['ebisumart_order_id']
@@ -62,12 +64,12 @@ class EbisumartsaleOrderLine(models.Model):
         vals['order_id'] = binding.odoo_id.id
         binding = super(EbisumartsaleOrderLine, self).create(vals)
         return binding
-    
-class ProductAdapter(Component):
+
+class SaleOrderAdapter(Component):
     _name = 'ebisumart.sale.order.adapter'
     _inherit = ['ebisumart.adapter']
     _apply_on = ['ebisumart.sale.order']
-    
+
     # Add methods for communicating with the Ebisumart API
 
     def search(self, attributes=None, filters=None):

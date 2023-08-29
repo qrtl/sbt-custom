@@ -3,6 +3,7 @@
 
 from odoo.addons.component.core import Component
 from odoo.addons.connector.components.mapper import mapping, only_create
+
 from ..components.mapper import normalize_datetime
 
 
@@ -33,10 +34,11 @@ class ProductImportMapper(Component):
     @mapping
     def invoice_policy(self, record):
         return {'invoice_policy': 'delivery'}
-    
+
     @mapping
     def backend_id(self, record):
         return {'backend_id': self.backend_record.id}
+
 
 class ProductBatchImporter(Component):
     _name = 'ebisumart.product.product.batch.importer'
@@ -49,6 +51,7 @@ class ProductBatchImporter(Component):
         external_ids = [item["ITEM_ID"] for item in external_datas]
         for external_id in external_ids:
             self._import_record(external_id)
+
 
 class EbisumartProductImporter(Component):
     _name = 'ebisumart.product.product.importer'

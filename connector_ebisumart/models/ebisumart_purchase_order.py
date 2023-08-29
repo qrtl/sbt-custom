@@ -1,8 +1,9 @@
 # Copyright 2023 Quartile Limited
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
+from odoo import api, fields, models
+
 from odoo.addons.component.core import Component
-from odoo import fields, models, api
 
 
 class EbisumartPurchaseOrder(models.Model):
@@ -32,7 +33,7 @@ class PurchaseOrder(models.Model):
     )
     cancel_in_ebisumart = fields.Boolean()
 
-    def _after_import(self): 
+    def _after_import(self):
         if self.state == 'purchase':
             return
         # Confirm the purchase order.
@@ -53,6 +54,7 @@ class PurchaseOrder(models.Model):
         inv = self.env['account.invoice'].create(po_invoice)
         inv.purchase_order_change()
         inv.action_invoice_open()
+
 
 class EbisumartPurchaseOrderLine(models.Model):
     _name = 'ebisumart.purchase.order.line'
@@ -76,7 +78,7 @@ class EbisumartPurchaseOrderLine(models.Model):
         store=True,
         required=False,
     )
-    
+
     @api.model
     def create(self, vals):
         ebisumart_order_id = vals['ebisumart_order_id']
@@ -85,12 +87,13 @@ class EbisumartPurchaseOrderLine(models.Model):
         vals['date_planned'] = binding.odoo_id.date_order
         binding = super(EbisumartPurchaseOrderLine, self).create(vals)
         return binding
-    
-class ProductAdapter(Component):
+
+
+class PurchaseAdapter(Component):
     _name = 'ebisumart.purchase.order.adapter'
     _inherit = ['ebisumart.adapter']
     _apply_on = ['ebisumart.purchase.order']
-    
+
     # Add methods for communicating with the Ebisumart API
 
     def search(self, attributes=None, filters=None):

@@ -3,6 +3,7 @@
 
 from odoo.addons.component.core import Component
 from odoo.addons.connector.components.mapper import mapping
+
 from ..components.mapper import normalize_datetime
 
 
@@ -17,28 +18,43 @@ class PurchaseOrderImportMapper(Component):
         (normalize_datetime('REGIST_DATE'), 'created_at'),
         (normalize_datetime('UPDATE_DATE'), 'updated_at'),
     ]
-    children = [('order_details', 'ebisumart_order_line_ids', 'ebisumart.purchase.order.line')]
+    children = [
+        ('order_details', 'ebisumart_order_line_ids', 'ebisumart.purchase.order.line')
+    ]
 
     @mapping
     def name(self, record):
         return {'name': 'P_' + record['ORDER_DISP_NO']}
-    
+
     @mapping
     def partner_id(self, record):
         for line in record.get('order_details', []):
             binder = self.binder_for('ebisumart.product.product')
             product = binder.to_internal(line['ITEM_ID'], unwrap=True)
             if product and product.torihikisaki_id != 0:
-                partner = self.env["res.partner"].search([('ebisumart_id','=', product.torihikisaki_id),('supplier','=',True)],limit=1)
-                sales_partner = self.env["res.partner"].search([('ebisumart_id','=', product.torihikisaki_id),('customer','=',True)],limit=1)
+                partner = self.env["res.partner"].search(
+                    [
+                        ('ebisumart_id', '=', product.torihikisaki_id),
+                        ('supplier', '=', True)
+                    ],
+                    limit=1
+                )
+                sales_partner = self.env["res.partner"].search(
+                    [
+                        ('ebisumart_id', '=', product.torihikisaki_id),
+                        ('customer', '=', True)
+                    ],
+                    limit=1
+                )
                 partner.write({'sales_partner': sales_partner.id})
                 if partner:
                     return {'partner_id': partner.id}
         return {}
-    
+
     @mapping
     def backend_id(self, record):
         return {'backend_id': self.backend_record.id}
+
 
 class PurchaseOrderLineMapper(Component):
     _name = 'ebisumart.purchase.order.line.mapper'
@@ -49,7 +65,7 @@ class PurchaseOrderLineMapper(Component):
               ('ITEM_NAME', 'name'),
               ('SHIRE_PRICE', 'price_unit'),
               ('QUANTITY', 'product_qty')]
-       
+
     @mapping
     def product(self, record):
         binder = self.binder_for('ebisumart.product.product')
@@ -58,7 +74,7 @@ class PurchaseOrderLineMapper(Component):
             "product_id %s should have been imported in "
             "PurchaseOrderImporter._import_dependencies" % record['ITEM_ID'])
         return {'product_id': product.id, 'product_uom': product.uom_id.id}
-    
+
 
 class PurchaseOrderBatchImporter(Component):
     _name = 'ebisumart.purchase.order.batch.importer'
@@ -69,31 +85,43 @@ class PurchaseOrderBatchImporter(Component):
         for receipt in purchase_order.picking_ids.filtered(lambda r: r.state == 'done'):
             # Create the reverse transfer (return receipt)
             stock_return_picking = self.env['stock.return.picking']
-            return_wizard = stock_return_picking.with_context(active_ids=receipt.ids, active_id=receipt.ids[0]).create({})
+            return_wizard = stock_return_picking.with_context(
+                active_ids=receipt.ids, active_id=receipt.ids[0]
+            ).create({})
             return_result = return_wizard.create_returns()
 
-            # Usually, the return_result contains information about the newly created return picking(s)
+            # Usually, the return_result contains information about
+            # the newly created return picking(s)
             if return_result and 'res_id' in return_result:
-                new_return_picking = self.env['stock.picking'].browse(return_result['res_id'])
+                new_return_picking = self.env['stock.picking'].browse(
+                    return_result['res_id']
+                )
 
                 # Validate (confirm) the return picking
                 if new_return_picking.state != 'done':
-                    wiz = self.env['stock.immediate.transfer'].create({'pick_ids': [(4, new_return_picking.id)]})
+                    wiz = self.env['stock.immediate.transfer'].create({
+                        'pick_ids': [(4, new_return_picking.id)]
+                    })
                     wiz.process()
-        
+
     def create_vendor_credit_note(self, purchase_order):
-        for invoice in purchase_order.invoice_ids.filtered(lambda r: r.state not in ['cancel','draft'] and r.type == 'in_invoice'):
+        for invoice in purchase_order.invoice_ids.filtered(
+            lambda r: r.state not in ['cancel', 'draft'] and r.type == 'in_invoice'
+        ):
             # Create the refund (vendor credit note)
             account_invoice_refund = self.env['account.invoice.refund']
             refund_wizard = account_invoice_refund.create({
                 'description': 'Credit Note',
                 'filter_refund': 'refund',  # refund the entire invoice
             })
-            refund_result = refund_wizard.with_context(active_ids=invoice.ids).invoice_refund()
+            refund_result = refund_wizard.with_context(
+                active_ids=invoice.ids
+            ).invoice_refund()
 
             if refund_result and refund_result.get('domain'):
                 # Search for the newly created credit note
-                credit_notes = self.env['account.invoice'].search(refund_result.get('domain'))
+                credit_notes = self.env['account.invoice'].search(
+                    refund_result.get('domain'))
                 for credit_note in credit_notes:
                     if credit_note.state == 'draft':
                         credit_note.action_invoice_open()
@@ -104,11 +132,11 @@ class PurchaseOrderBatchImporter(Component):
         external_ids = [
             order["ORDER_NO"]
             for order in external_datas
-            if order.get('ORDER_DISP_NO') and
-            order.get('AUTHORY_DATE') and
-            order.get('SEND_DATE') and 
-            order.get('FREE_ITEM1') and
-            not order.get('CANCEL_DATE')
+            if order.get('ORDER_DISP_NO')
+            and order.get('AUTHORY_DATE')
+            and order.get('SEND_DATE')
+            and order.get('FREE_ITEM1')
+            and not order.get('CANCEL_DATE')
         ]
         cancel_ids = [
             order["ORDER_NO"]
@@ -127,6 +155,7 @@ class PurchaseOrderBatchImporter(Component):
 
         for external_id in external_ids:
             self._import_record(external_id)
+
 
 class EbisumartPurchaseOrderImporter(Component):
     _name = 'ebisumart.purchase.order.importer'

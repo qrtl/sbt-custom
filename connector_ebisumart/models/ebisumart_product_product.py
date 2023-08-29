@@ -1,8 +1,10 @@
 # Copyright 2023 Quartile Limited
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
-from odoo.addons.component.core import Component
 from odoo import fields, models
+
+from odoo.addons.component.core import Component
+
 
 class EbisumartProduct(models.Model):
     _name = 'ebisumart.product.product'
@@ -10,10 +12,10 @@ class EbisumartProduct(models.Model):
     _inherits = {'product.product': 'odoo_id'}
     _description = 'Ebisumart Product'
 
-    odoo_id = fields.Many2one(comodel_name='product.product', string='Product',
-                             required=True, ondelete='cascade')
+    odoo_id = fields.Many2one(comodel_name='product.product', string='Product', required=True, ondelete='cascade')
     created_at = fields.Date('Created At (on Ebisumart)')
     updated_at = fields.Date('Updated At (on Ebisumart)')
+
 
 class ProductProduct(models.Model):
     _inherit = 'product.product'
@@ -25,11 +27,12 @@ class ProductProduct(models.Model):
     )
     torihikisaki_id = fields.Integer("Partner ID on ebisumart", readonly=True, store=True)
 
+
 class ProductAdapter(Component):
     _name = 'ebisumart.product.adapter'
     _inherit = ['ebisumart.adapter']
     _apply_on = ['ebisumart.product.product']
-    
+
     # Add methods for communicating with the Ebisumart API
 
     def search(self, attributes=None, filters=None):
@@ -43,4 +46,3 @@ class ProductAdapter(Component):
         if not attributes:
             attributes = ['ITEM_NAME','ITEM_ID', 'ITEM_CD', 'TEIKA', 'TORIHIKISAKI_ID', 'SHIRE_PRICE', 'REGIST_DATE', 'UPDATE_DATE']  # Define default attributes to fetch
         return super().read(f"/items/{external_id}", attributes=attributes)
-

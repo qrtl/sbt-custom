@@ -1,8 +1,10 @@
 # Copyright 2023 Quartile Limited
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
-from odoo.addons.component.core import Component
 from odoo import fields, models
+
+from odoo.addons.component.core import Component
+
 
 class EbisumartResPartner(models.Model):
     _name = 'ebisumart.res.partner'
@@ -10,10 +12,7 @@ class EbisumartResPartner(models.Model):
     _inherits = {'res.partner': 'odoo_id'}
     _description = 'Ebisumart Partner'
 
-    odoo_id = fields.Many2one(comodel_name='res.partner',
-                              string='Partner',
-                              required=True,
-                              ondelete='cascade')
+    odoo_id = fields.Many2one(comodel_name='res.partner',string='Partner',required=True, ondelete='cascade')
 
 
 class ResPartner(models.Model):
@@ -25,7 +24,7 @@ class ResPartner(models.Model):
         string='Ebisumart Bindings',
     )
 
-    def _after_import(self): 
+    def _after_import(self):
         vendor = self.env['res.partner'].search([('ebisumart_id','=', self.ebisumart_id),('supplier','=', True)])
         new_ref = self.ref[:-1] + 'P' if self.ref else 'P'
 
@@ -36,11 +35,12 @@ class ResPartner(models.Model):
         vendor = self.copy()
         vendor.write({'name': self.name, 'customer': False, 'supplier': True, 'ref': new_ref, 'ebisumart_bind_ids': False})
 
+
 class ResPartnerAdapter(Component):
     _name = 'ebisumart.res.parnter.adapter'
     _inherit = ['ebisumart.adapter']
     _apply_on = ['ebisumart.res.partner']
-    
+
     # Add methods for communicating with the Ebisumart API
 
     def search(self, attributes=None, filters=None):

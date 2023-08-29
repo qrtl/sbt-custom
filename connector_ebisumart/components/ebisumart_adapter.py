@@ -1,9 +1,11 @@
 # Copyright 2023 Quartile Limited
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
-from odoo.addons.component.core import AbstractComponent
-import requests
 import json
+
+from odoo.addons.component.core import AbstractComponent
+
+import requests
 
 
 class EbisumartCRUDAdapter(AbstractComponent):
@@ -15,14 +17,17 @@ class EbisumartCRUDAdapter(AbstractComponent):
         """ Search records according to some filters """
         raise NotImplementedError
 
+    # pylint: disable=W8106
     def read(self, external_id, attributes=None):
         """ Returns the detailed information for record """
         raise NotImplementedError
 
+    # pylint: disable=W8106
     def create(self, data):
         """ Create a record on the external system """
         raise NotImplementedError
 
+    # pylint: disable=W8106
     def write(self, external_id, data):
         """ Update records on the external system """
         raise NotImplementedError
@@ -91,7 +96,7 @@ class EbisumartAdapater(AbstractComponent):
 
         return records
 
-    
+    # pylint: disable=W8106
     def read(self, external_id, attributes=None):
         """
         Method to read a specific record from Ebisumart using its external ID.
