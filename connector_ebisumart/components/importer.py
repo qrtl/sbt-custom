@@ -34,7 +34,7 @@ class EbisumartImporter(AbstractComponent):
         return map_record.values(for_create=True, fields=fields, **kwargs)
     
     def _create(self, data):
-        """ Create the OpenERP record """
+        """ Create the Odoo record """
         # special check on data before import
         self._validate_data(data)
         model = self.model.with_context(connector_no_export=True)

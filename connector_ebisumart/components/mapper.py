@@ -12,7 +12,7 @@ class EbisumartImportMapper(AbstractComponent):
 def normalize_datetime(field):
     """Change a invalid date which comes from Ebisumart, if
     no real date is set to null for correct import to
-    OpenERP"""
+    Odoo"""
 
     def modifier(self, record, to_attr):
         if record[field] == '0000-00-00 00:00:00':
