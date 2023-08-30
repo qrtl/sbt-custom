@@ -129,6 +129,20 @@ class EbisumartImporter(AbstractComponent):
         _logger.debug('%d updated from ebisumart %s', binding, self.external_id)
         return
 
+    def _must_skip(self):
+        """ Hook called right after we read the data from the backend.
+
+        If the method returns a message giving a reason for the
+        skipping, the import will be interrupted and the message
+        recorded in the job (if the import is called directly by the
+        job, not by dependencies).
+
+        If it returns None, the import will continue normally.
+
+        :returns: None | str | unicode
+        """
+        return
+
     def _after_import(self, binding):
         """ Hook called at the end of the import """
         return
@@ -153,6 +167,10 @@ class EbisumartImporter(AbstractComponent):
             except IDMissingInBackend:
                 return _('Record does no longer exist in Ebisumart')
 
+        skip = self._must_skip()    # pylint: disable=assignment-from-none
+        if skip:
+            return skip
+        
         binding = self._get_binding()
 
         if not force and self._is_uptodate(binding):

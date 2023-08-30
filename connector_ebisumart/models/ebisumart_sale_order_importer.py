@@ -3,6 +3,7 @@
 
 from odoo.addons.component.core import Component
 from odoo.addons.connector.components.mapper import mapping
+from odoo import _
 
 from ..components.mapper import normalize_datetime
 
@@ -150,6 +151,21 @@ class EbisumartSaleOrderImporter(Component):
     _name = 'ebisumart.sale.order.importer'
     _inherit = 'ebisumart.importer'
     _apply_on = 'ebisumart.sale.order'
+
+    def _must_skip(self):
+        """ Hook called right after we read the data from the backend.
+
+        If the method returns a message giving a reason for the
+        skipping, the import will be interrupted and the message
+        recorded in the job (if the import is called directly by the
+        job, not by dependencies).
+
+        If it returns None, the import will continue normally.
+
+        :returns: None | str | unicode
+        """
+        if self.binder.to_internal(self.external_id):
+            return _('Already imported')
 
     def _import_dependencies(self):
         record = self.ebisumart_record
