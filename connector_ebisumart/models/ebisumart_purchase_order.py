@@ -108,7 +108,7 @@ class PurchaseAdapter(Component):
     def search(self, attributes=None, filters=None):
         # Define default attributes to fetch
         attributes = [
-            'ORDER_NO', 'KESSAI_ID', 'ORDER_DISP_NO', 'AUTHORY_DATE',
+            'ORDER_NO', 'KESSAI_ID', 'ORDER_DISP_NO',
             'SEND_DATE', 'CANCEL_DATE', 'FREE_ITEM1'
         ]
         return super().search("/orders", attributes=attributes, filters=filters)

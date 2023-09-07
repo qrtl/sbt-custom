@@ -10,6 +10,6 @@ class AccountJournal(models.Model):
     ebisumart_payment_type = fields.Selection(
         [
             ('credit_card', 'Credit Card'),
-            ('playment_slip', 'Payment Slip'),
+            ('payment_slip', 'Payment Slip'),
         ]
     )
