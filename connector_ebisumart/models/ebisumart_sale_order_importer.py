@@ -33,24 +33,24 @@ class SaleOrderImportMapper(Component):
                         ('ebisumart_id', '=', product.torihikisaki_id),
                         ('customer', '=', True)
                     ], limit=1)
-                vendor = self.env["res.partner"].search(
-                [
-                    ('ebisumart_id', '=', product.torihikisaki_id),
-                    ('supplier', '=', True)
-                ], limit=1)
+                # vendor = self.env["res.partner"].search(
+                # [
+                #     ('ebisumart_id', '=', product.torihikisaki_id),
+                #     ('supplier', '=', True)
+                # ], limit=1)
 
-                existing_supplierinfo = self.env['product.supplierinfo'].search([
-                    ('name', '=', vendor.id),
-                    ('product_tmpl_id', '=', product.product_tmpl_id.id),
-                    ('price', '=', line['SHIRE_PRICE'])
-                ])
-                # If no existing supplierinfo with the same price, supplier and product
-                if not existing_supplierinfo:
-                    self.env['product.supplierinfo'].create({
-                        'name': vendor.id,
-                        'price': line['SHIRE_PRICE'],
-                        'product_tmpl_id': product.product_tmpl_id.id,
-                    })
+                # existing_supplierinfo = self.env['product.supplierinfo'].search([
+                #     ('name', '=', vendor.id),
+                #     ('product_tmpl_id', '=', product.product_tmpl_id.id),
+                #     ('price', '=', line['SHIRE_PRICE'])
+                # ])
+                # # If no existing supplierinfo with the same price, supplier and product
+                # if not existing_supplierinfo:
+                #     self.env['product.supplierinfo'].create({
+                #         'name': vendor.id,
+                #         'price': line['SHIRE_PRICE'],
+                #         'product_tmpl_id': product.product_tmpl_id.id,
+                #     })
                 return {'partner_id': partner.id}
 
     @mapping
