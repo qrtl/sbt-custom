@@ -22,6 +22,15 @@ class ProductImportMapper(Component):
         (normalize_datetime('UPDATE_DATE'), 'updated_at'),
     ]
 
+    # @mapping
+    # def route_ids(self, record):
+    #     buy_route = self.env['stock.location.route'].search([('name', '=', 'Buy')], limit=1)
+    #     mto_route = self.env['stock.location.route'].search([('name', '=', 'Make To Order')], limit=1)
+        
+    #     if buy_route and mto_route:
+    #         return {'route_ids': [(6, 0, [buy_route.id, mto_route.id])]}
+    #     return {}
+    
     @only_create
     @mapping
     def odoo_id(self, record):

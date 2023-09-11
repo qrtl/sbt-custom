@@ -7,7 +7,6 @@ from odoo import _
 
 from ..components.mapper import normalize_datetime
 
-
 class SaleOrderImportMapper(Component):
     _name = 'ebisumart.sale.order.import.mapper'
     _inherit = 'ebisumart.import.mapper'
@@ -34,6 +33,24 @@ class SaleOrderImportMapper(Component):
                         ('ebisumart_id', '=', product.torihikisaki_id),
                         ('customer', '=', True)
                     ], limit=1)
+                vendor = self.env["res.partner"].search(
+                [
+                    ('ebisumart_id', '=', product.torihikisaki_id),
+                    ('supplier', '=', True)
+                ], limit=1)
+
+                existing_supplierinfo = self.env['product.supplierinfo'].search([
+                    ('name', '=', vendor.id),
+                    ('product_tmpl_id', '=', product.product_tmpl_id.id),
+                    ('price', '=', line['SHIRE_PRICE'])
+                ])
+                # If no existing supplierinfo with the same price, supplier and product
+                if not existing_supplierinfo:
+                    self.env['product.supplierinfo'].create({
+                        'name': vendor.id,
+                        'price': line['SHIRE_PRICE'],
+                        'product_tmpl_id': product.product_tmpl_id.id,
+                    })
                 return {'partner_id': partner.id}
 
     @mapping
@@ -117,6 +134,32 @@ class SaleOrderBatchImporter(Component):
                     })
                     wiz.process()
 
+    def create_return_receipt(self, purchase_order):
+        for receipt in purchase_order.picking_ids.filtered(lambda r: r.state == 'done'):
+            # Create the reverse transfer (return receipt)
+            stock_return_picking = self.env['stock.return.picking']
+            return_wizard = stock_return_picking.with_context(
+                active_ids=receipt.ids, active_id=receipt.ids[0]
+            ).create({})
+            # Update the product_return_moves lines to set the is_refund field
+            for return_move in return_wizard.product_return_moves:
+                return_move.to_refund = True
+            return_result = return_wizard.create_returns()
+
+            # Usually, the return_result contains information about
+            # the newly created return picking(s)
+            if return_result and 'res_id' in return_result:
+                new_return_picking = self.env['stock.picking'].browse(
+                    return_result['res_id']
+                )
+
+                # Validate (confirm) the return picking
+                if new_return_picking.state != 'done':
+                    wiz = self.env['stock.immediate.transfer'].create({
+                        'pick_ids': [(4, new_return_picking.id)]
+                    })
+                    wiz.process()
+
     def run(self, filters=None):
         """ Run the synchronization """
         external_datas = self.backend_adapter.search(filters)
@@ -140,6 +183,9 @@ class SaleOrderBatchImporter(Component):
                 if sale_order.cancel_in_ebisumart:
                     continue
                 self.create_return_delivery(sale_order)
+                purchase_order = self.env['purchase.order'].search([('origin', '=', sale_order.name)])
+                if purchase_order:
+                    self.create_return_receipt(purchase_order)
                 sale_order.write({"cancel_in_ebisumart": True})
 
         for external_id in external_ids:

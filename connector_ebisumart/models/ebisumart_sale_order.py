@@ -37,7 +37,6 @@ class SaleOrder(models.Model):
     )
     cancel_in_ebisumart = fields.Boolean()
 
-
 class EbisumartSaleOrderLine(models.Model):
     _name = 'ebisumart.sale.order.line'
     _inherit = 'ebisumart.binding'
@@ -90,7 +89,7 @@ class SaleOrderAdapter(Component):
         if not attributes:
             attributes = [
                 'ORDER_NO', 'KESSAI_ID', 'ORDER_DISP_NO', 'SEND_DATE',
-                'order_details(ORDER_D_NO, ITEM_ID, ITEM_NAME, QUANTITY, TEIKA)',
+                'order_details(ORDER_D_NO, ITEM_ID, ITEM_NAME, QUANTITY, TEIKA, SHIRE_PRICE)',
                 'REGIST_DATE', 'UPDATE_DATE'
             ]
         return super().read(f"/orders/{external_id}", attributes=attributes)
