@@ -112,7 +112,7 @@ class SaleOrderAdapter(Component):
         if not attributes:
             attributes = [
                 'ORDER_NO', 'KESSAI_ID', 'ORDER_DISP_NO', 'SEND_DATE',
-                'order_details(ORDER_D_NO, ITEM_ID, ITEM_NAME, QUANTITY, TEIKA, SHIRE_PRICE)',
+                'order_details(ORDER_D_NO, ITEM_ID, ITEM_NAME, QUANTITY, TEIKA)',
                 'REGIST_DATE', 'UPDATE_DATE'
             ]
         return super().read(f"/orders/{external_id}", attributes=attributes)
