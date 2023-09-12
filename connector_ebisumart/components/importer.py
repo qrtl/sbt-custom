@@ -2,12 +2,13 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
 import logging
-
-from odoo import _, fields
+from contextlib import closing, contextmanager
+import odoo
+from odoo import _, fields, tools
 
 from odoo.addons.component.core import AbstractComponent
 from odoo.addons.connector.exception import IDMissingInBackend
-from odoo.addons.queue_job.exception import NothingToDoJob
+from odoo.addons.queue_job.exception import NothingToDoJob, RetryableJobError
 from datetime import datetime
 import pytz
 
@@ -147,6 +148,32 @@ class EbisumartImporter(AbstractComponent):
         """ Hook called at the end of the import """
         return
 
+    @contextmanager
+    def do_in_new_work_context(self, model_name=None):
+        """ Context manager that yields a new component work context
+
+        Using a new Odoo Environment thus a new PG transaction.
+
+        This can be used to make a preemptive check in a new transaction,
+        for instance to see if another transaction already made the work.
+        """
+        with odoo.api.Environment.manage():
+            registry = odoo.registry(self.env.cr.dbname)
+            with closing(registry.cursor()) as cr:
+                try:
+                    new_env = odoo.api.Environment(cr, self.env.uid,
+                                                   self.env.context)
+                    backend = self.backend_record.with_env(new_env)
+                    with backend.work_on(model_name
+                                         or self.model._name) as work:
+                        yield work
+                except Exception:
+                    cr.rollback()
+                    raise
+                else:
+                    if not tools.config['test_enable']:
+                        cr.commit()  # pylint: disable=invalid-commit
+        
     def run(self, external_id, force=False, data=None):
         """ Run the synchronization
 
@@ -156,7 +183,7 @@ class EbisumartImporter(AbstractComponent):
         lock_name = 'import({}, {}, {}, {})'.format(
             self.backend_record._name,
             self.backend_record.id,
-            self.work.model_name,
+            self.model._name,
             external_id,
         )
         if data:
@@ -172,7 +199,55 @@ class EbisumartImporter(AbstractComponent):
             return skip
         
         binding = self._get_binding()
-
+        if not binding:
+            with self.do_in_new_work_context() as new_work:
+                # Even when we use an advisory lock, we may have
+                # concurrent issues.
+                # Explanation:
+                # We import Partner A and B, both of them import a
+                # partner category X.
+                #
+                # The squares represent the duration of the advisory
+                # lock, the transactions starts and ends on the
+                # beginnings and endings of the 'Import Partner'
+                # blocks.
+                # T1 and T2 are the transactions.
+                #
+                # ---Time--->
+                # > T1 /------------------------\
+                # > T1 | Import Partner A       |
+                # > T1 \------------------------/
+                # > T1        /-----------------\
+                # > T1        | Imp. Category X |
+                # > T1        \-----------------/
+                #                     > T2 /------------------------\
+                #                     > T2 | Import Partner B       |
+                #                     > T2 \------------------------/
+                #                     > T2        /-----------------\
+                #                     > T2        | Imp. Category X |
+                #                     > T2        \-----------------/
+                #
+                # As you can see, the locks for Category X do not
+                # overlap, and the transaction T2 starts before the
+                # commit of T1. So no lock prevents T2 to import the
+                # category X and T2 does not see that T1 already
+                # imported it.
+                #
+                # The workaround is to open a new DB transaction at the
+                # beginning of each import (e.g. at the beginning of
+                # "Imp. Category X") and to check if the record has been
+                # imported meanwhile. If it has been imported, we raise
+                # a Retryable error so T2 is rollbacked and retried
+                # later (and the new T3 will be aware of the category X
+                # from the its inception).
+                binder = new_work.component(usage='binder')
+                if binder.to_internal(self.external_id):
+                    raise RetryableJobError(
+                        'Concurrent error. The job will be retried later',
+                        seconds=1,
+                        ignore_retry=True
+                    )
+                
         if not force and self._is_uptodate(binding):
             return _('Already up-to-date.')
 
