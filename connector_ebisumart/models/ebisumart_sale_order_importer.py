@@ -7,6 +7,7 @@ from odoo import _
 
 from ..components.mapper import normalize_datetime
 
+
 class SaleOrderImportMapper(Component):
     _name = 'ebisumart.sale.order.import.mapper'
     _inherit = 'ebisumart.import.mapper'
@@ -24,6 +25,7 @@ class SaleOrderImportMapper(Component):
 
     @mapping
     def partner_id(self, record):
+        partner = False
         for line in record.get('order_details', []):
             binder = self.binder_for('ebisumart.product.product')
             product = binder.to_internal(line['ITEM_ID'], unwrap=True)
@@ -51,7 +53,7 @@ class SaleOrderImportMapper(Component):
                         'price': line['SHIRE_PRICE'],
                         'product_tmpl_id': product.product_tmpl_id.id,
                     })
-                return {'partner_id': partner.id}
+        return {'partner_id': partner.id}
 
     @mapping
     def journal_id(self, record):
