@@ -37,28 +37,6 @@ class SaleOrder(models.Model):
     )
     cancel_in_ebisumart = fields.Boolean()
 
-    def _after_import(self):
-        product_ids = self.order_line.mapped('product_id')
-        for product in product_ids:
-            vendor = self.env["res.partner"].search(
-            [
-                ('ebisumart_id', '=', product.torihikisaki_id),
-                ('supplier', '=', True)
-            ], limit=1)
-
-            existing_supplierinfo = self.env['product.supplierinfo'].search([
-                ('name', '=', vendor.id),
-                ('product_tmpl_id', '=', product.product_tmpl_id.id),
-                ('price', '=', product.list_price)
-            ])
-            # If no existing supplierinfo with the same price, supplier and product
-            if not existing_supplierinfo:
-                self.env['product.supplierinfo'].create({
-                    'name': vendor.id,
-                    'price': product.list_price,
-                    'product_tmpl_id': product.product_tmpl_id.id,
-                })
-
 
 class EbisumartSaleOrderLine(models.Model):
     _name = 'ebisumart.sale.order.line'
@@ -112,7 +90,7 @@ class SaleOrderAdapter(Component):
         if not attributes:
             attributes = [
                 'ORDER_NO', 'KESSAI_ID', 'ORDER_DISP_NO', 'SEND_DATE',
-                'order_details(ORDER_D_NO, ITEM_ID, ITEM_NAME, QUANTITY, TEIKA)',
+                'order_details(ORDER_D_NO, ITEM_ID, ITEM_NAME, QUANTITY, TEIKA, SHIRE_PRICE)',
                 'REGIST_DATE', 'UPDATE_DATE'
             ]
         return super().read(f"/orders/{external_id}", attributes=attributes)
