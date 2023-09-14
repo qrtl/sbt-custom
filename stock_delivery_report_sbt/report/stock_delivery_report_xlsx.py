@@ -136,9 +136,6 @@ SELECT
     ai.exchange_rate AS exchange_rate,
     ai.number AS invoice_number,
     ai.state AS status,
-"""
-        if invoice_type == "out_invoice":
-            query += """
     ail.currency_id AS currency_id,
     ail.price_unit AS price_unit,
     ail.price_subtotal AS amount,
@@ -148,19 +145,7 @@ FROM
 JOIN account_invoice ai ON ai.id = ail.invoice_id
 JOIN sale_order_line_invoice_rel solir ON solir.invoice_line_id = ail.id
 """
-        else:
-            query += """
-    rf_ail.currency_id AS currency_id,
-    rf_ail.price_unit AS price_unit,
-    rf_ail.price_subtotal AS amount,
-    (rf_ail.price_total - rf_ail.price_subtotal) AS tax_amount
-FROM
-    account_invoice_line ail
-JOIN sale_order_line_invoice_rel solir ON solir.invoice_line_id = ail.id
-JOIN account_invoice ai ON ai.refund_invoice_id = ail.invoice_id
-JOIN account_invoice_line rf_ail ON rf_ail.invoice_id = ai.id
-    AND rf_ail.product_id = ail.product_id
-"""
+
         query += """
 WHERE ai.type = %s
 AND solir.order_line_id IN %s
