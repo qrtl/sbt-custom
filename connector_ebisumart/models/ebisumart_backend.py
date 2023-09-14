@@ -185,11 +185,6 @@ class EbisumartBackend(models.Model):
         self._import_from_date('ebisumart.product.product')
         return True
 
-    # @api.multi
-    # def import_purchase_orders(self):
-    #     self._import_orders('ebisumart.purchase.order')
-    #     return True
-
     @api.multi
     def import_sale_orders(self):
         self._import_orders('ebisumart.sale.order')
@@ -220,7 +215,6 @@ class EbisumartBackend(models.Model):
     @api.model
     def _scheduler_import_orders(self, domain=None):
         self._ebisumart_backend('import_sale_orders', domain=domain)
-        # self._ebisumart_backend('import_purchase_orders', domain=domain)
 
     @api.model
     def _scheduler_import_partners(self, domain=None):

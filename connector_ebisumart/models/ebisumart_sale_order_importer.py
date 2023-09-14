@@ -110,16 +110,14 @@ class SaleOrderBatchImporter(Component):
     _inherit = 'ebisumart.delayed.batch.importer'
     _apply_on = ['ebisumart.sale.order']
 
-    def create_return_delivery(self, sale_order):
-        for delivery in sale_order.picking_ids.filtered(lambda r: r.state == 'done'):
-            # Create the reverse transfer (return delivery)
+    
+    def create_return_picking(self, order):
+        for picking in order.picking_ids.filtered(lambda r: r.state == 'done'):
+            # Create the reverse transfer
             stock_return_picking = self.env['stock.return.picking']
             return_wizard = stock_return_picking.with_context(
-                active_ids=delivery.ids, active_id=delivery.ids[0]
+                active_ids=picking.ids, active_id=picking.ids[0]
             ).create({})
-            # Update the product_return_moves lines to set the is_refund field
-            for return_move in return_wizard.product_return_moves:
-                return_move.to_refund = True
             return_result = return_wizard.create_returns()
 
             # Usually, the return_result contains information
@@ -136,31 +134,21 @@ class SaleOrderBatchImporter(Component):
                     })
                     wiz.process()
 
-    def create_return_receipt(self, purchase_order):
-        for receipt in purchase_order.picking_ids.filtered(lambda r: r.state == 'done'):
-            # Create the reverse transfer (return receipt)
-            stock_return_picking = self.env['stock.return.picking']
-            return_wizard = stock_return_picking.with_context(
-                active_ids=receipt.ids, active_id=receipt.ids[0]
-            ).create({})
-            # Update the product_return_moves lines to set the is_refund field
-            for return_move in return_wizard.product_return_moves:
-                return_move.to_refund = True
-            return_result = return_wizard.create_returns()
-
-            # Usually, the return_result contains information about
-            # the newly created return picking(s)
-            if return_result and 'res_id' in return_result:
-                new_return_picking = self.env['stock.picking'].browse(
-                    return_result['res_id']
-                )
-
-                # Validate (confirm) the return picking
-                if new_return_picking.state != 'done':
-                    wiz = self.env['stock.immediate.transfer'].create({
-                        'pick_ids': [(4, new_return_picking.id)]
-                    })
-                    wiz.process()
+    def create_credit_note(self, order, invoice_type):
+        for invoice in order.invoice_ids.filtered(lambda r: r.state not in ['cancel','draft'] and r.type == invoice_type):
+            # Create the refund (credit note)
+            account_invoice_refund = self.env['account.invoice.refund']
+            refund_wizard = account_invoice_refund.create({
+                'description': 'Credit Note',
+                'filter_refund': 'refund',  # refund the entire invoice
+            })
+            refund_result = refund_wizard.with_context(active_ids=invoice.ids).invoice_refund()
+            if refund_result and refund_result.get('domain'):
+                # Search for the newly created credit note
+                credit_notes = self.env['account.invoice'].search(refund_result.get('domain'))
+                for credit_note in credit_notes:
+                    if credit_note.state == 'draft':
+                        credit_note.action_invoice_open()
 
     def run(self, filters=None):
         """ Run the synchronization """
@@ -184,10 +172,12 @@ class SaleOrderBatchImporter(Component):
             if sale_order:
                 if sale_order.cancel_in_ebisumart:
                     continue
-                self.create_return_delivery(sale_order)
+                self.create_return_picking(sale_order)
+                self.create_credit_note(sale_order, invoice_type="out_invoice")
                 purchase_order = self.env['purchase.order'].search([('origin', '=', sale_order.name)])
                 if purchase_order:
-                    self.create_return_receipt(purchase_order)
+                    self.create_return_picking(purchase_order)
+                    self.create_credit_note(purchase_order, invoice_type="in_invoice")
                 sale_order.write({"cancel_in_ebisumart": True})
 
         for external_id in external_ids:
