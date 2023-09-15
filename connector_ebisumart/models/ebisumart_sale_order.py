@@ -36,7 +36,7 @@ class SaleOrder(models.Model):
         string='Ebisumart Bindings'
     )
     cancel_in_ebisumart = fields.Boolean()
-
+    ebisumart_send_date = fields.Datetime()
 
 class EbisumartSaleOrderLine(models.Model):
     _name = 'ebisumart.sale.order.line'

@@ -7,7 +7,6 @@
         <field name="arch" type="xml">
            <field name="vat" position="after">
                 <field name="ebisumart_id" readonly="1" />
-                <field name="sales_partner" readonly="1" />
            </field>
         </field>
     </record>

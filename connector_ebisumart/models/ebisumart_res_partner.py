@@ -29,25 +29,6 @@ class ResPartner(models.Model):
         string='Ebisumart Bindings'
     )
 
-    def _after_import(self):
-        vendor = self.env['res.partner'].search(
-            [('ebisumart_id', '=', self.ebisumart_id), ('supplier', '=', True)]
-        )
-        new_ref = self.ref[:-1] + 'P' if self.ref else 'P'
-
-        if vendor:
-            vendor.write({'name': self.name, 'ref': new_ref})
-            return
-
-        vendor = self.copy()
-        vendor.write({
-            'name': self.name,
-            'customer': False,
-            'supplier': True,
-            'ref': new_ref,
-            'ebisumart_bind_ids': False
-        })
-
 
 class ResPartnerAdapter(Component):
     _name = 'ebisumart.res.parnter.adapter'

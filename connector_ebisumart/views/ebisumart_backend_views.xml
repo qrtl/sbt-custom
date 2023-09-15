@@ -32,6 +32,7 @@
                         <field name="ebisumart_api_url" />
                         <field name="api_version" />
                         <field name="redirect_uri" />
+                        <field name="sale_partner_id" />
                         <field name="access_token" readonly="1" />
                         <field name="refresh_token" readonly="1" />
                         <field name="token_expiration" readonly="1" />

@@ -18,10 +18,14 @@ class ResPartnerMapper(Component):
     @mapping
     def company_type(self, record):
         return {'company_type': 'company'}
+    
+    @mapping
+    def supplier_customer(self, record):
+        return {'supplier': True, 'customer': False}
 
     @mapping
     def ref(self, record):
-        return {'ref': record['TORIHIKISAKI_CD'] + '_S'}
+        return {'ref': record['TORIHIKISAKI_CD'] + '_P'}
 
     @mapping
     def backend_id(self, record):
@@ -46,5 +50,3 @@ class EbisumartResPartnerImporter(Component):
     _inherit = 'ebisumart.importer'
     _apply_on = 'ebisumart.res.partner'
 
-    def _after_import(self, binding):
-        binding.odoo_id._after_import()

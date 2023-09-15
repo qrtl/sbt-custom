@@ -16,6 +16,7 @@ class SaleOrderImportMapper(Component):
     direct = [
         ("ORDER_NO", "external_id"),
         ("ORDER_DISP_NO", "name"),
+        (normalize_datetime('SEND_DATE'), 'ebisumart_send_date'),
         (normalize_datetime('REGIST_DATE'), 'created_at'),
         (normalize_datetime('UPDATE_DATE'), 'updated_at'),
     ]
@@ -25,16 +26,10 @@ class SaleOrderImportMapper(Component):
 
     @mapping
     def partner_id(self, record):
-        partner = False
         for line in record.get('order_details', []):
             binder = self.binder_for('ebisumart.product.product')
             product = binder.to_internal(line['ITEM_ID'], unwrap=True)
             if product and product.torihikisaki_id != 0:
-                partner = self.env["res.partner"].search(
-                    [
-                        ('ebisumart_id', '=', product.torihikisaki_id),
-                        ('customer', '=', True)
-                    ], limit=1)
                 vendor = self.env["res.partner"].search(
                     [
                         ('ebisumart_id', '=', product.torihikisaki_id),
@@ -53,7 +48,7 @@ class SaleOrderImportMapper(Component):
                         'price': line['SHIRE_PRICE'],
                         'product_tmpl_id': product.product_tmpl_id.id,
                     })
-        return {'partner_id': partner.id}
+        return {'partner_id': self.backend_record.sale_partner_id.id}
 
     @mapping
     def journal_id(self, record):
