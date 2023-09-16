@@ -11,6 +11,8 @@ class AutomaticWorkflowJob(models.Model):
         super()._do_validate_sale_order(sale)
         # Search purchase order
         po = self.env['purchase.order'].search([('origin', '=', sale.name)])
+        if not po:
+            return
         # map data_planned
         for line in po.order_line:
             line.date_planned = po.date_order

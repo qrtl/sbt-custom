@@ -13,5 +13,6 @@ class SaleOrder(models.Model):
         res = super(SaleOrder, self).action_confirm()
         # force assign schedule_date with SEND_DATE of ebisumart
         for order in self:
-            order.picking_ids.write({'scheduled_date': self.ebisumart_send_date})
+            if order.ebisumart_send_date:
+                order.picking_ids.write({'scheduled_date': order.ebisumart_send_date})
         return res
