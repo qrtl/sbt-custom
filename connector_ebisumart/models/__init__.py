@@ -1,7 +1,6 @@
 from . import automatic_workflow_job
 from . import stock_rule
 from . import res_partner
-from . import purchase_order
 from . import sale_order
 from . import account_journal
 from . import ebisumart_backend

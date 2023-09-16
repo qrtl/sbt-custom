@@ -2,7 +2,6 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
 from odoo import models, api
-import logging
 
 
 class SaleOrder(models.Model):
@@ -12,6 +11,7 @@ class SaleOrder(models.Model):
     @api.multi
     def action_confirm(self):
         res = super(SaleOrder, self).action_confirm()
-        for picking in self.picking_ids:
-            picking.write({'scheduled_date': self.ebisumart_send_date})
+        # force assign schedule_date with SEND_DATE of ebisumart
+        for order in self:
+            order.picking_ids.write({'scheduled_date': self.ebisumart_send_date})
         return res
