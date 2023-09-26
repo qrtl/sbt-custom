@@ -38,6 +38,39 @@ class SaleOrder(models.Model):
     cancel_in_ebisumart = fields.Boolean()
     ebisumart_send_date = fields.Datetime()
 
+    def after_import(self):
+        self.action_confirm()
+        # Search purchase order
+        po = self.env['purchase.order'].search([('origin', '=', self.name)])
+        if not po:
+            return
+        # map data_planned
+        for line in po.order_line:
+            line.date_planned = po.date_order
+        # Confirm the purchase order.
+        po.button_confirm()
+        # Validate the associated receipt (stock picking).
+        for picking in po.picking_ids:
+            wiz = self.env['stock.immediate.transfer'].create(
+                {'pick_ids': [(4, picking.id)]}
+            )
+            wiz.process()
+
+        po_invoice = {
+            'partner_id': po.partner_id.id,
+            'account_id': po.partner_id.property_account_payable_id.id,
+            'state': 'draft',
+            'type': 'in_invoice',
+            'purchase_id': po.id,
+        }
+        inv = self.env['account.invoice'].create(po_invoice)
+        inv.purchase_order_change()
+        inv.action_invoice_open()
+        # Force assign scheduled_date
+        self.picking_ids.write({'scheduled_date': self.ebisumart_send_date})
+
+
+
 class EbisumartSaleOrderLine(models.Model):
     _name = 'ebisumart.sale.order.line'
     _inherit = 'ebisumart.binding'

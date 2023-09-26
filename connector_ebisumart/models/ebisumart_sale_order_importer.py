@@ -204,3 +204,5 @@ class EbisumartSaleOrderImporter(Component):
         for line in record.get('order_details', []):
             self._import_dependency(line['ITEM_ID'], 'ebisumart.product.product')
 
+    def _after_import(self, binding):
+        binding.odoo_id.after_import()
