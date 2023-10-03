@@ -67,6 +67,7 @@ class SaleOrder(models.Model):
         inv.purchase_order_change()
         inv.action_invoice_open()
         # Force assign scheduled_date
+        # TODO put this line after action_confirm()
         self.picking_ids.write({'scheduled_date': self.ebisumart_send_date})
 
 
@@ -115,7 +116,7 @@ class SaleOrderAdapter(Component):
     def search(self, attributes=None, filters=None):
         attributes = [
             'ORDER_NO', 'KESSAI_ID', 'ORDER_DISP_NO',
-            'SEND_DATE', 'CANCEL_DATE', 'FREE_ITEM1'
+            'SEND_DATE', 'CANCEL_DATE', 'FREE_ITEM1', 'IS_TEIKI_HEADER_FLG'
         ]
         return super().search("/orders", attributes=attributes, filters=filters)
 

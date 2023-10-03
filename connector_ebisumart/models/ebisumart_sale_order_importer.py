@@ -154,6 +154,7 @@ class SaleOrderBatchImporter(Component):
             if order.get('ORDER_DISP_NO')
             and order.get('SEND_DATE')
             and order.get('FREE_ITEM1')
+            and not order.get('IS_TEIKI_HEADER_FLG')
             and not order.get('CANCEL_DATE')
         ]
         cancel_ids = [
