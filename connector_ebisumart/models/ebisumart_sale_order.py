@@ -38,7 +38,25 @@ class SaleOrder(models.Model):
     cancel_in_ebisumart = fields.Boolean()
     ebisumart_send_date = fields.Datetime()
 
-    def after_import(self):
+    def get_tax_exclusive_price(self, price_inclusive, tax_percent):
+        """
+        Calculates the tax-exclusive price given a tax-inclusive price and tax rate.
+        """
+        return price_inclusive / (1 + tax_percent/100.0)
+
+    def after_import(self, ebisumart_record, backend_record):
+        if ebisumart_record.get('COUPON_WARIBIKI') and ebisumart_record['COUPON_WARIBIKI'] > 0:
+            taxes = backend_record.coupon_product_id.taxes_id
+            total_tax_percent = sum(tax.amount for tax in taxes)
+            price_unit_exclusive = self.get_tax_exclusive_price(ebisumart_record['COUPON_WARIBIKI'], total_tax_percent)
+            self.env['sale.order.line'].create({
+                'product_id': backend_record.coupon_product_id.id,
+                'price_unit': -1 * price_unit_exclusive,
+                'product_uom': backend_record.coupon_product_id.uom_id.id,
+                'product_uom_qty': 1.0,
+                'order_id': self.id,
+                'name': backend_record.coupon_product_id.name,
+            })
         self.action_confirm()
         # Search purchase order
         po = self.env['purchase.order'].search([('origin', '=', self.name)])
@@ -123,7 +141,7 @@ class SaleOrderAdapter(Component):
     def read(self, external_id, attributes=None):
         if not attributes:
             attributes = [
-                'ORDER_NO', 'KESSAI_ID', 'ORDER_DISP_NO', 'SEND_DATE',
+                'ORDER_NO', 'KESSAI_ID', 'ORDER_DISP_NO', 'SEND_DATE', 'COUPON_WARIBIKI',
                 'order_details(ORDER_D_NO, ITEM_ID, ITEM_NAME, QUANTITY, TEIKA, SHIRE_PRICE)',
                 'REGIST_DATE', 'UPDATE_DATE'
             ]
