@@ -48,7 +48,7 @@ class EbisumartAdapater(AbstractComponent):
         """Generate the complete API URL using the given endpoint and params."""
         backend = self._get_backend()
         url = (
-            f"{backend.ebisumart_api_url}/{backend.ebisumart_number}"
+            f"{backend.ebisumart_api_url}"
             f"/dataaccess{endpoint}.json"
         )
         return url

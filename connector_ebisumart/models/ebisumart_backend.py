@@ -59,7 +59,7 @@ class EbisumartBackend(models.Model):
         """Retrieve token"""
         # Define the API Endpoint
         oauth_url = (
-            f"{self.ebisumart_access_url}/{self.ebisumart_number}"
+            f"{self.ebisumart_access_url}"
             f"/app_oauth/access_token.html"
         )
 
@@ -105,7 +105,7 @@ class EbisumartBackend(models.Model):
         # Check if the token is expired
         backend = self.env['ebisumart.backend'].sudo().search([])[0]
         oauth_url = (
-            f"{backend.ebisumart_access_url}/{backend.ebisumart_number}"
+            f"{backend.ebisumart_access_url}"
             f"/app_oauth/access_token.html"
         )
 
