@@ -1,8 +1,10 @@
 # Copyright 2023 Quartile Limited
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
-from odoo.addons.component.core import AbstractComponent
 from datetime import datetime
+
+from odoo.addons.component.core import AbstractComponent
+
 import pytz
 
 

@@ -42,13 +42,16 @@ class SaleOrder(models.Model):
         """
         Calculates the tax-exclusive price given a tax-inclusive price and tax rate.
         """
-        return price_inclusive / (1 + tax_percent/100.0)
+        return price_inclusive / (1 + tax_percent / 100.0)
 
     def after_import(self, ebisumart_record, backend_record):
-        if ebisumart_record.get('COUPON_WARIBIKI') and ebisumart_record['COUPON_WARIBIKI'] > 0:
+        if (ebisumart_record.get('COUPON_WARIBIKI')
+                and ebisumart_record['COUPON_WARIBIKI'] > 0):
             taxes = backend_record.coupon_product_id.taxes_id
             total_tax_percent = sum(tax.amount for tax in taxes)
-            price_unit_exclusive = self.get_tax_exclusive_price(ebisumart_record['COUPON_WARIBIKI'], total_tax_percent)
+            price_unit_exclusive = self.get_tax_exclusive_price(
+                ebisumart_record['COUPON_WARIBIKI'], total_tax_percent
+            )
             self.env['sale.order.line'].create({
                 'product_id': backend_record.coupon_product_id.id,
                 'price_unit': -1 * price_unit_exclusive,
@@ -140,8 +143,9 @@ class SaleOrderAdapter(Component):
     def read(self, external_id, attributes=None):
         if not attributes:
             attributes = [
-                'ORDER_NO', 'KESSAI_ID', 'ORDER_DISP_NO', 'SEND_DATE', 'COUPON_WARIBIKI',
-                'order_details(ORDER_D_NO, ITEM_ID, ITEM_NAME, QUANTITY, TEIKA, SHIRE_PRICE)',
-                'REGIST_DATE', 'UPDATE_DATE'
+                'ORDER_NO', 'KESSAI_ID', 'ORDER_DISP_NO', 'SEND_DATE',
+                'order_details(ORDER_D_NO, ITEM_ID, ITEM_NAME, QUANTITY, '
+                'TEIKA, SHIRE_PRICE)',
+                'REGIST_DATE', 'UPDATE_DATE', 'COUPON_WARIBIKI',
             ]
         return super().read(f"/orders/{external_id}", attributes=attributes)

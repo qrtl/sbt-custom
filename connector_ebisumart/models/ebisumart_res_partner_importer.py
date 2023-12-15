@@ -18,7 +18,7 @@ class ResPartnerMapper(Component):
     @mapping
     def company_type(self, record):
         return {'company_type': 'company'}
-    
+
     @mapping
     def supplier_customer(self, record):
         return {'supplier': True, 'customer': False}
@@ -49,4 +49,3 @@ class EbisumartResPartnerImporter(Component):
     _name = 'ebisumart.res.parnter.importer'
     _inherit = 'ebisumart.importer'
     _apply_on = 'ebisumart.res.partner'
-

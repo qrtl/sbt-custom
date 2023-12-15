@@ -103,7 +103,7 @@ WITH base_move AS (
                 report.date_to, "23:59:59", hours_diff
             )
             query += """
-    AND sp.scheduled_date <= %s
+    AND sp. <= %s
         """
             params.append(date_to)
         if report.filter_picking_partner_ids:

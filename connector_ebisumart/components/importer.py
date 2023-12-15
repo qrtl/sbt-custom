@@ -3,13 +3,15 @@
 
 import logging
 from contextlib import closing, contextmanager
+from datetime import datetime
+
 import odoo
 from odoo import _, fields, tools
 
 from odoo.addons.component.core import AbstractComponent
 from odoo.addons.connector.exception import IDMissingInBackend
 from odoo.addons.queue_job.exception import NothingToDoJob, RetryableJobError
-from datetime import datetime
+
 import pytz
 
 _logger = logging.getLogger(__name__)
@@ -52,7 +54,7 @@ class EbisumartImporter(AbstractComponent):
 
     def convert_ebisumart_date_to_utc(self, raw_date):
         """
-        Convert an Ebisumart date (assumed to be in user's timezone) 
+        Convert an Ebisumart date (assumed to be in user's timezone)
         to offset-naive UTC datetime object.
         """
         # If the date is invalid, return None
@@ -74,7 +76,7 @@ class EbisumartImporter(AbstractComponent):
 
         # Return offset-naive UTC datetime
         return utc_dt.replace(tzinfo=None)
-    
+
     def _is_uptodate(self, binding):
         """Return True if the import should be skipped because
         it is already up-to-date in Odoo"""
@@ -88,7 +90,9 @@ class EbisumartImporter(AbstractComponent):
             return
         from_string = fields.Datetime.from_string
         sync_date = from_string(sync)
-        ebisumart_date = self.convert_ebisumart_date_to_utc(self.ebisumart_record['UPDATE_DATE'])
+        ebisumart_date = self.convert_ebisumart_date_to_utc(
+            self.ebisumart_record['UPDATE_DATE']
+        )
         return ebisumart_date < sync_date
 
     def _import_dependency(self, external_id, binding_model,
@@ -173,7 +177,7 @@ class EbisumartImporter(AbstractComponent):
                 else:
                     if not tools.config['test_enable']:
                         cr.commit()  # pylint: disable=invalid-commit
-        
+
     def run(self, external_id, force=False, data=None):
         """ Run the synchronization
 
@@ -197,7 +201,7 @@ class EbisumartImporter(AbstractComponent):
         skip = self._must_skip()    # pylint: disable=assignment-from-none
         if skip:
             return skip
-        
+
         binding = self._get_binding()
         if not binding:
             with self.do_in_new_work_context() as new_work:
@@ -247,7 +251,7 @@ class EbisumartImporter(AbstractComponent):
                         seconds=1,
                         ignore_retry=True
                     )
-                
+
         if not force and self._is_uptodate(binding):
             return _('Already up-to-date.')
 

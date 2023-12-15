@@ -1,7 +1,9 @@
 # Copyright 2023 Quartile Limited
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
-from odoo import models, api
+import logging
+
+from odoo import api, models
 
 
 class SaleOrder(models.Model):
@@ -10,9 +12,11 @@ class SaleOrder(models.Model):
 
     @api.multi
     def action_confirm(self):
-        res = super(SaleOrder, self).action_confirm()
-        # force assign schedule_date with SEND_DATE of ebisumart
+        super(SaleOrder, self).action_confirm()
+
         for order in self:
+            logging.info("Processing Order: %s", order.name)
             if order.ebisumart_send_date:
-                order.picking_ids.write({'scheduled_date': order.ebisumart_send_date})
-        return res
+                for line in order.order_line:
+                    line.move_ids.write({'date_expected': order.ebisumart_send_date})
+        return

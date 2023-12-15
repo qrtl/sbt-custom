@@ -26,7 +26,11 @@ class EbisumartBackend(models.Model):
     ebisumart_api_url = fields.Char(required=True)
     api_version = fields.Char(default='1')
     redirect_uri = fields.Char(required=True)
-    sale_partner_id = fields.Many2one("res.partner", required=True, domain="[('customer','=',True)]")
+    sale_partner_id = fields.Many2one(
+        "res.partner",
+        required=True,
+        domain="[('customer','=',True)]"
+    )
     coupon_product_id = fields.Many2one("product.product", required=True)
     access_token = fields.Char()
     refresh_token = fields.Char()

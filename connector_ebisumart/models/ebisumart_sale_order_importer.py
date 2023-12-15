@@ -1,9 +1,10 @@
 # Copyright 2023 Quartile Limited
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
+from odoo import _
+
 from odoo.addons.component.core import Component
 from odoo.addons.connector.components.mapper import mapping
-from odoo import _
 
 from ..components.mapper import normalize_datetime
 
@@ -103,7 +104,6 @@ class SaleOrderBatchImporter(Component):
     _inherit = 'ebisumart.delayed.batch.importer'
     _apply_on = ['ebisumart.sale.order']
 
-    
     def create_return_picking(self, order):
         for picking in order.picking_ids.filtered(lambda r: r.state == 'done'):
             # Create the reverse transfer
@@ -128,17 +128,23 @@ class SaleOrderBatchImporter(Component):
                     wiz.process()
 
     def create_credit_note(self, order, invoice_type):
-        for invoice in order.invoice_ids.filtered(lambda r: r.state not in ['cancel','draft'] and r.type == invoice_type):
+        for invoice in order.invoice_ids.filtered(
+            lambda r: r.state not in ['cancel', 'draft'] and r.type == invoice_type
+        ):
             # Create the refund (credit note)
             account_invoice_refund = self.env['account.invoice.refund']
             refund_wizard = account_invoice_refund.create({
                 'description': 'Credit Note',
                 'filter_refund': 'refund',  # refund the entire invoice
             })
-            refund_result = refund_wizard.with_context(active_ids=invoice.ids).invoice_refund()
+            refund_result = refund_wizard.with_context(
+                active_ids=invoice.ids
+            ).invoice_refund()
             if refund_result and refund_result.get('domain'):
                 # Search for the newly created credit note
-                credit_notes = self.env['account.invoice'].search(refund_result.get('domain'))
+                credit_notes = self.env['account.invoice'].search(
+                    refund_result.get('domain')
+                )
                 for credit_note in credit_notes:
                     if credit_note.state == 'draft':
                         credit_note.action_invoice_open()
@@ -168,7 +174,9 @@ class SaleOrderBatchImporter(Component):
                     continue
                 self.create_return_picking(sale_order)
                 self.create_credit_note(sale_order, invoice_type="out_invoice")
-                purchase_order = self.env['purchase.order'].search([('origin', '=', sale_order.name)])
+                purchase_order = self.env['purchase.order'].search(
+                    [('origin', '=', sale_order.name)]
+                )
                 if purchase_order:
                     self.create_return_picking(purchase_order)
                     self.create_credit_note(purchase_order, invoice_type="in_invoice")
