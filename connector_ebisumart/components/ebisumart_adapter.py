@@ -67,12 +67,9 @@ class EbisumartAdapater(AbstractComponent):
         url = self._generate_api_url(endpoint)
         headers = self._generate_headers()
         response = requests.get(url, headers=headers, params=params)
-
+        response.raise_for_status()
         if response.status_code == 200:
             return response.json()
-        else:
-            # TODO: Add error handling
-            pass
 
     def search(self, endpoint, attributes=None, filters=None):
         """Method to search data from Ebisumart, retrieving all pages."""

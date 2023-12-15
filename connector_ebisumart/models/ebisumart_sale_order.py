@@ -89,7 +89,6 @@ class SaleOrder(models.Model):
         self.picking_ids.write({'scheduled_date': self.ebisumart_send_date})
 
 
-
 class EbisumartSaleOrderLine(models.Model):
     _name = 'ebisumart.sale.order.line'
     _inherit = 'ebisumart.binding'

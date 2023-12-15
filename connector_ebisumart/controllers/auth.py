@@ -5,7 +5,6 @@ from odoo.http import request
 
 
 class EbisumartAuth(http.Controller):
-    # TODO: add error message control
     @http.route('/ebisumart/auth', type='http', auth="public", csrf=False)
     def ebisumart_auth_redirect(self, **kwargs):
         code = kwargs.get('code')

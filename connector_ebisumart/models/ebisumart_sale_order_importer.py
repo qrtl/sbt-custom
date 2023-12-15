@@ -66,8 +66,6 @@ class SaleOrderImportMapper(Component):
                 return {'journal_id': journal.id}
         return
 
-    # TODO
-    # To search process id with some identifier, not name
     @mapping
     def workflow_process_id(self, record):
         workflow_process_id = self.env["sale.workflow.process"].search(

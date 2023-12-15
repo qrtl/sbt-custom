@@ -82,6 +82,7 @@ class EbisumartBackend(models.Model):
 
         # Make the POST request
         response = requests.post(oauth_url, data=payload, headers=headers)
+        response.raise_for_status()
 
         # Check the response
         if response.status_code == 200:
@@ -96,9 +97,6 @@ class EbisumartBackend(models.Model):
             )
             self.token_expiration = expiry_time.strftime('%Y-%m-%d %H:%M:%S')
             self.shop_id = response_data['shop_id']
-        else:
-            # TODO: Handle the error case
-            pass
 
     def refresh_oauth_token(self):
         """Refresh the token"""
@@ -127,6 +125,7 @@ class EbisumartBackend(models.Model):
 
         # Make the POST request
         response = requests.post(oauth_url, data=payload, headers=headers)
+        response.raise_for_status()
 
         # Check the response
         if response.status_code == 200:
@@ -139,9 +138,6 @@ class EbisumartBackend(models.Model):
                 seconds=response_data['expires_in']
             )
             backend.token_expiration = expiry_time.strftime('%Y-%m-%d %H:%M:%S')
-        else:
-            # TODO: Handle the error case
-            pass
 
     @api.multi
     def add_checkpoint(self, record):
@@ -149,22 +145,6 @@ class EbisumartBackend(models.Model):
         record.ensure_one()
         return add_checkpoint(self.env, record._name, record.id,
                               self._name, self.id)
-
-    # TODO
-    # Handle filters and import with date
-    @api.multi
-    def _import_from_date(self, model):
-        for backend in self:
-            self.env[model].with_delay().import_batch(
-                backend,
-                filters=None
-            )
-
-    # For future use case
-    @api.multi
-    def import_product_categories(self):
-        self._import_from_date('ebisumart.product.category')
-        return True
 
     @api.multi
     def _import_orders(self, model):
@@ -204,11 +184,6 @@ class EbisumartBackend(models.Model):
         backends = self.search(domain)
         if backends:
             getattr(backends, callback)()
-
-    # For future use case
-    @api.model
-    def _scheduler_import_product_categories(self, domain=None):
-        self._ebisumart_backend('import_product_categories', domain=domain)
 
     @api.model
     def _scheduler_import_products(self, domain=None):
