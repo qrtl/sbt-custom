@@ -86,6 +86,8 @@ class SaleOrder(models.Model):
         }
         inv = self.env['account.invoice'].create(po_invoice)
         inv.purchase_order_change()
+        # Recalculate the invoice lines.
+        inv._onchange_invoice_line_ids()
         inv.action_invoice_open()
         # Force assign scheduled_date
         # TODO put this line after action_confirm()
@@ -146,6 +148,6 @@ class SaleOrderAdapter(Component):
                 'ORDER_NO', 'KESSAI_ID', 'ORDER_DISP_NO', 'SEND_DATE',
                 'order_details(ORDER_D_NO, ITEM_ID, ITEM_NAME, QUANTITY, '
                 'TEIKA, SHIRE_PRICE)',
-                'REGIST_DATE', 'UPDATE_DATE', 'COUPON_WARIBIKI',
+                'REGIST_DATE', 'UPDATE_DATE', 'COUPON_WARIBIKI', 'CANCEL_DATE',
             ]
         return super().read(f"/orders/{external_id}", attributes=attributes)

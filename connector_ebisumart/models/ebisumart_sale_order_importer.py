@@ -77,6 +77,12 @@ class SaleOrderImportMapper(Component):
     @mapping
     def backend_id(self, record):
         return {'backend_id': self.backend_record.id}
+    
+    @mapping
+    def cancel_in_ebisumart(self, record):
+        if record.get('CANCEL_DATE'):
+            return {'cancel_in_ebisumart': True}
+        return {'cancel_in_ebisumart': False}
 
 
 class SaleOrderLineMapper(Component):
@@ -104,50 +110,6 @@ class SaleOrderBatchImporter(Component):
     _inherit = 'ebisumart.delayed.batch.importer'
     _apply_on = ['ebisumart.sale.order']
 
-    def create_return_picking(self, order):
-        for picking in order.picking_ids.filtered(lambda r: r.state == 'done'):
-            # Create the reverse transfer
-            stock_return_picking = self.env['stock.return.picking']
-            return_wizard = stock_return_picking.with_context(
-                active_ids=picking.ids, active_id=picking.ids[0]
-            ).create({})
-            return_result = return_wizard.create_returns()
-
-            # Usually, the return_result contains information
-            # about the newly created return picking(s)
-            if return_result and 'res_id' in return_result:
-                new_return_picking = self.env['stock.picking'].browse(
-                    return_result['res_id']
-                )
-
-                # Validate (confirm) the return picking
-                if new_return_picking.state != 'done':
-                    wiz = self.env['stock.immediate.transfer'].create({
-                        'pick_ids': [(4, new_return_picking.id)]
-                    })
-                    wiz.process()
-
-    def create_credit_note(self, order, invoice_type):
-        for invoice in order.invoice_ids.filtered(
-            lambda r: r.state not in ['cancel', 'draft'] and r.type == invoice_type
-        ):
-            # Create the refund (credit note)
-            account_invoice_refund = self.env['account.invoice.refund']
-            refund_wizard = account_invoice_refund.create({
-                'description': 'Credit Note',
-                'filter_refund': 'refund',  # refund the entire invoice
-            })
-            refund_result = refund_wizard.with_context(
-                active_ids=invoice.ids
-            ).invoice_refund()
-            if refund_result and refund_result.get('domain'):
-                # Search for the newly created credit note
-                credit_notes = self.env['account.invoice'].search(
-                    refund_result.get('domain')
-                )
-                for credit_note in credit_notes:
-                    if credit_note.state == 'draft':
-                        credit_note.action_invoice_open()
 
     def run(self, filters=None):
         """ Run the synchronization """
@@ -159,32 +121,10 @@ class SaleOrderBatchImporter(Component):
             and order.get('SEND_DATE')
             and order.get('FREE_ITEM1')
             and not order.get('IS_TEIKI_HEADER_FLG')
-            and not order.get('CANCEL_DATE')
         ]
-        cancel_ids = [
-            order["ORDER_NO"]
-            for order in external_datas
-            if order.get('CANCEL_DATE')
-        ]
-        for external_id in cancel_ids:
-            binder = self.binder_for('ebisumart.sale.order')
-            sale_order = binder.to_internal(external_id, unwrap=True)
-            if sale_order:
-                if sale_order.cancel_in_ebisumart:
-                    continue
-                self.create_return_picking(sale_order)
-                self.create_credit_note(sale_order, invoice_type="out_invoice")
-                purchase_order = self.env['purchase.order'].search(
-                    [('origin', '=', sale_order.name)]
-                )
-                if purchase_order:
-                    self.create_return_picking(purchase_order)
-                    self.create_credit_note(purchase_order, invoice_type="in_invoice")
-                sale_order.write({"cancel_in_ebisumart": True})
 
         for external_id in external_ids:
             self._import_record(external_id)
-
 
 class EbisumartSaleOrderImporter(Component):
     _name = 'ebisumart.sale.order.importer'
