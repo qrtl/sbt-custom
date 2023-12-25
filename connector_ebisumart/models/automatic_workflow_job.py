@@ -18,13 +18,17 @@ class AutomaticWorkflowJob(models.Model):
 
     def _do_validate_invoice(self, invoice):
         super()._do_validate_invoice(invoice)
-        sale_order = invoice.mapped('invoice_line_ids.sale_line_ids.order_id')
-        if sale_order.cancel_in_ebisumart:
-            self.create_credit_note(sale_order, invoice_type="out_invoice")
-            purchase_order = self.env['purchase.order'].search([('origin', '=', sale_order.name)])
-            if not purchase_order:
-                return
-            self.create_credit_note(purchase_order, invoice_type="in_invoice")
+        sale_orders = invoice.mapped('invoice_line_ids.sale_line_ids.order_id')
+        for sale_order in sale_orders:
+            if sale_order.cancel_in_ebisumart:
+                self.create_credit_note(sale_order, invoice_type="out_invoice")
+                purchase_order = self.env['purchase.order'].search(
+                    [('origin', '=', sale_order.name)],
+                    limit=1, order="id desc"
+                )
+                if not purchase_order:
+                    continue
+                self.create_credit_note(purchase_order, invoice_type="in_invoice")
 
     def create_return_picking(self, order):
         for picking in order.picking_ids.filtered(lambda r: r.state == 'done'):
