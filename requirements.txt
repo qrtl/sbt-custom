@@ -1,2 +1,1 @@
-xlsxwriter
-xlrd
+# generated from manifests external_dependencies
