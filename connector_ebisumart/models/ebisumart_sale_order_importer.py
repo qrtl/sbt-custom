@@ -77,7 +77,7 @@ class SaleOrderImportMapper(Component):
     @mapping
     def backend_id(self, record):
         return {'backend_id': self.backend_record.id}
-    
+
     @mapping
     def cancel_in_ebisumart(self, record):
         if record.get('CANCEL_DATE'):
@@ -110,7 +110,6 @@ class SaleOrderBatchImporter(Component):
     _inherit = 'ebisumart.delayed.batch.importer'
     _apply_on = ['ebisumart.sale.order']
 
-
     def run(self, filters=None):
         """ Run the synchronization """
         external_datas = self.backend_adapter.search(filters)
@@ -125,6 +124,7 @@ class SaleOrderBatchImporter(Component):
 
         for external_id in external_ids:
             self._import_record(external_id)
+
 
 class EbisumartSaleOrderImporter(Component):
     _name = 'ebisumart.sale.order.importer'

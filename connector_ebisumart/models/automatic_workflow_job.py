@@ -11,7 +11,9 @@ class AutomaticWorkflowJob(models.Model):
         super()._do_validate_picking(picking)
         if picking.sale_id.cancel_in_ebisumart:
             self.create_return_picking(picking.sale_id)
-            purchase_order = self.env['purchase.order'].search([('origin', '=', picking.sale_id.name)])
+            purchase_order = self.env['purchase.order'].search(
+                [('origin', '=', picking.sale_id.name)]
+                )
             if not purchase_order:
                 return
             self.create_return_picking(purchase_order)
