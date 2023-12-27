@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <menuitem
+        id="menu_ebisumart_root"
+        parent="connector.menu_connector_root"
+        name="Ebisumart"
+        sequence="10"
+        groups="connector.group_connector_manager"
+    />
+    <menuitem
+        id="menu_ebisumart_backend"
+        name="Backends"
+        parent="menu_ebisumart_root"
+        action="action_ebisumart_backend"
+    />
+</odoo>
