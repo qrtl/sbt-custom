@@ -10,13 +10,14 @@ class AutomaticWorkflowJob(models.Model):
     def _do_validate_picking(self, picking):
         super()._do_validate_picking(picking)
         if picking.sale_id.cancel_in_ebisumart:
-            self.create_return_picking(picking.sale_id)
+            return_date = picking.sale_id.ebisumart_cancel_date
+            self.create_return_picking(picking.sale_id, return_date)
             purchase_order = self.env['purchase.order'].search(
                 [('origin', '=', picking.sale_id.name)]
                 )
             if not purchase_order:
                 return
-            self.create_return_picking(purchase_order)
+            self.create_return_picking(purchase_order, return_date)
 
     def _do_validate_invoice(self, invoice):
         super()._do_validate_invoice(invoice)
@@ -32,7 +33,7 @@ class AutomaticWorkflowJob(models.Model):
                     continue
                 self.create_credit_note(purchase_order, invoice_type="in_invoice")
 
-    def create_return_picking(self, order):
+    def create_return_picking(self, order, return_date):
         for picking in order.picking_ids.filtered(lambda r: r.state == 'done'):
             # Create the reverse transfer
             stock_return_picking = self.env['stock.return.picking']
@@ -47,6 +48,7 @@ class AutomaticWorkflowJob(models.Model):
                 new_return_picking = self.env['stock.picking'].browse(
                     return_result['res_id']
                 )
+                new_return_picking.write({'scheduled_date': return_date})
 
                 # Validate (confirm) the return picking
                 if new_return_picking.state != 'done':

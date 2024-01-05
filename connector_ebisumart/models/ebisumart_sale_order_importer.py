@@ -18,6 +18,7 @@ class SaleOrderImportMapper(Component):
         ("ORDER_NO", "external_id"),
         ("ORDER_DISP_NO", "name"),
         (normalize_datetime('SEND_DATE'), 'ebisumart_send_date'),
+        (normalize_datetime('CANCEL_DATE'), 'ebisumart_cancel_date'),
         (normalize_datetime('REGIST_DATE'), 'created_at'),
         (normalize_datetime('UPDATE_DATE'), 'updated_at'),
     ]

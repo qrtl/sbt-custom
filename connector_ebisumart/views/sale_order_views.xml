@@ -7,6 +7,8 @@
         <field name="arch" type="xml">
             <field name="confirmation_date" position="after">
                 <field name="ebisumart_send_date" readonly="1" />
+                <field name="cancel_in_ebisumart" invisible="1" />
+                <field name="ebisumart_cancel_date" readonly="1" attrs="{'invisible': [('cancel_in_ebisumart', '=', False)]}"/>
             </field>
         </field>
     </record>
