@@ -37,6 +37,7 @@ class SaleOrder(models.Model):
     )
     cancel_in_ebisumart = fields.Boolean()
     ebisumart_send_date = fields.Datetime()
+    ebisumart_cancel_date = fields.Datetime()
 
     def get_tax_exclusive_price(self, price_inclusive, tax_percent):
         """

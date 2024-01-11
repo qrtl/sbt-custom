@@ -23,7 +23,7 @@ def normalize_datetime(field):
         raw_date = record[field]
 
         # If the date is invalid, return None
-        if raw_date == '0000-00-00 00:00:00':
+        if raw_date == '0000-00-00 00:00:00' or raw_date is None:
             return None
 
         # Convert the string to a naive datetime
