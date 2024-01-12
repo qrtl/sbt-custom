@@ -44,6 +44,10 @@ class ProductAdapter(Component):
 
     def search(self, attributes=None, filters=None):
         # Call the base method with the "/items" endpoint
+        last_fetch_date = self.backend_record.last_fetch_product_date
+        if last_fetch_date:
+            filters = self._get_filters(last_fetch_date)
+        self.backend_record.last_fetch_product_date = fields.datetime.now()
         attributes = ['ITEM_ID']
         return super().search("/items", attributes=attributes, filters=filters)
 

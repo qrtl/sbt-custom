@@ -36,6 +36,8 @@ class EbisumartBackend(models.Model):
     refresh_token = fields.Char()
     token_expiration = fields.Datetime()
     shop_id = fields.Char()
+    last_fetch_product_date = fields.Datetime()
+    last_fetch_order_date = fields.Datetime()
 
     def get_authorize_url(self):
         root_url = self.root_ebisumart_url
@@ -167,8 +169,16 @@ class EbisumartBackend(models.Model):
             )
 
     @api.multi
+    def _import_products(self, model):
+        for backend in self:
+            self.env[model].with_delay().import_batch(
+                backend,
+                filters=None
+            )
+
+    @api.multi
     def import_products(self):
-        self._import_from_date('ebisumart.product.product')
+        self._import_products('ebisumart.product.product')
         return True
 
     @api.multi
