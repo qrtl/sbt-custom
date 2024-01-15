@@ -139,7 +139,7 @@ class SaleOrderAdapter(Component):
     def search(self, attributes=None, filters=None):
         last_fetch_date = self.backend_record.last_fetch_order_date
         if last_fetch_date:
-            filters = self._get_filters(last_fetch_date)
+            filters = self._get_date_filters(last_fetch_date)
         self.backend_record.last_fetch_order_date = fields.datetime.now()
         attributes = [
             'ORDER_NO', 'KESSAI_ID', 'ORDER_DISP_NO',

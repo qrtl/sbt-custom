@@ -73,7 +73,7 @@ class EbisumartAdapater(AbstractComponent):
         if response.status_code == 200:
             return response.json()
 
-    def _get_filters(self, last_fetch_date):
+    def _get_date_filters(self, last_fetch_date):
         # Add a one-day buffer
         buffer_time = timedelta(days=1)
         last_fetch_date = last_fetch_date - buffer_time
