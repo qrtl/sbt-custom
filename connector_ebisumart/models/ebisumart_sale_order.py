@@ -4,6 +4,8 @@
 from odoo import api, fields, models
 
 from odoo.addons.component.core import Component
+import pytz
+from datetime import datetime
 
 
 class EbisumartSaleOrder(models.Model):
@@ -28,7 +30,8 @@ class EbisumartSaleOrder(models.Model):
 
 
 class SaleOrder(models.Model):
-    _inherit = 'sale.order'
+    _name = 'sale.order'
+    _inherit = ['order.cancel.process', 'sale.order']
 
     ebisumart_bind_ids = fields.One2many(
         comodel_name='ebisumart.sale.order',
@@ -38,6 +41,34 @@ class SaleOrder(models.Model):
     cancel_in_ebisumart = fields.Boolean()
     ebisumart_send_date = fields.Datetime()
     ebisumart_cancel_date = fields.Datetime()
+
+    def normalize_cancel_date(self, cancel_date):
+        # Convert the string to a naive datetime
+        if '.0' in cancel_date:
+            naive_dt = datetime.strptime(cancel_date, "%Y-%m-%d %H:%M:%S.%f")
+        else:
+            naive_dt = datetime.strptime(cancel_date, "%Y-%m-%d %H:%M:%S")
+        user_timezone = pytz.timezone(self.env.user.tz)
+        aware_dt = user_timezone.localize(naive_dt)
+        # Convert the timezone-aware datetime to UTC and make it naive
+        utc_dt = aware_dt.astimezone(pytz.UTC).replace(tzinfo=None)
+        return utc_dt
+
+    @api.model
+    def order_cancel_process(self, cancel_date):
+        ebisumart_cancel_date = self.normalize_cancel_date(cancel_date)
+        self.create_return_picking(self, ebisumart_cancel_date)
+        self.create_credit_note(self, invoice_type="out_invoice")
+        purchase_order = self.env['purchase.order'].search(
+            [('origin', '=', self.name)], limit=1
+        )
+        if purchase_order:
+            self.create_return_picking(purchase_order, ebisumart_cancel_date)
+            self.create_credit_note(purchase_order, invoice_type="in_invoice")
+        self.write({
+            "cancel_in_ebisumart": True,
+            "ebisumart_cancel_date": ebisumart_cancel_date
+        })
 
     def get_tax_exclusive_price(self, price_inclusive, tax_percent):
         """

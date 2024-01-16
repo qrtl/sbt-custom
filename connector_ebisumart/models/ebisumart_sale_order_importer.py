@@ -145,6 +145,14 @@ class EbisumartSaleOrderImporter(Component):
         :returns: None | str | unicode
         """
         if self.binder.to_internal(self.external_id):
+            record = self.ebisumart_record
+            if record.get('CANCEL_DATE'):
+                sale_order = self.binder.to_internal(self.external_id, unwrap=True)
+                if sale_order:
+                    if sale_order.cancel_in_ebisumart:
+                        return _('Already Cancelled.')
+                    sale_order.order_cancel_process(record.get('CANCEL_DATE'))
+                    return _('Already Cancelled.')
             return _('Already imported')
 
     def _import_dependencies(self):
