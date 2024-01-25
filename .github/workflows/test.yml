@@ -49,6 +49,7 @@ jobs:
           - 5432:5432
     env:
       ADDONS_PATH: "/opt/odoo/addons,sbtechnology"
+      ADDONS_DIR: "sbtechnology"
     steps:
       - uses: actions/checkout@v3
         with:
