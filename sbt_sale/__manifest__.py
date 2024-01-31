@@ -8,7 +8,7 @@
     "summary": "",
     "author": "Pactera, Quartile Limited",
     "company": "Pactera",
-    "website": "https://jp.pactera.com/",
+    "website": "https://www.quartile.co",
     "depends": [
         "account_report_menu_node_sbt",
         "account_accountant",
