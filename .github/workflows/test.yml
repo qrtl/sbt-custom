@@ -47,19 +47,19 @@ jobs:
           POSTGRES_DB: odoo
         ports:
           - 5432:5432
-    env:
-      ADDONS_PATH: "/opt/odoo/addons,sbtechnology"
+    # env:
+    #   ADDONS_PATH: "/opt/odoo/addons"
     steps:
       - uses: actions/checkout@v3
         with:
           persist-credentials: false
-      - name: Clone Private Repo
-        uses: actions/checkout@master
-        with:
-          repository: qrtl/sbtechnology
-          token: ${{ secrets.CI_PRIVATE_REPO_ACCESS_TOKEN }}
-          path: sbtechnology
-          ref: refs/heads/12.0-add-liecnese
+      # - name: Clone Private Repo
+      #   uses: actions/checkout@master
+      #   with:
+      #     repository: qrtl/sbtechnology
+      #     token: ${{ secrets.CI_PRIVATE_REPO_ACCESS_TOKEN }}
+      #     path: sbtechnology
+      #     ref: refs/heads/12.0-add-liecnese
       - name: Install addons and dependencies
         run: oca_install_addons
       - name: Check licenses
