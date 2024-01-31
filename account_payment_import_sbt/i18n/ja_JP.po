@@ -1,0 +1,308 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* account_payment_import_sbt
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 12.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-10-29 10:21+0000\n"
+"PO-Revision-Date: 2020-10-29 10:21+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: account_payment_import_sbt
+#: code:addons/account_payment_import_sbt/models/account_payment_import.py:253
+#, python-format
+msgid "%s is required."
+msgstr "「%s」を入力してください。"
+
+#. module: account_payment_import_sbt
+#: code:addons/account_payment_import_sbt/models/account_payment_import.py:260
+#, python-format
+msgid "%s only accepts numeric value."
+msgstr "「%s」は数字に入力してください。"
+
+#. module: account_payment_import_sbt
+#: model:ir.model,name:account_payment_import_sbt.model_account_payment_import
+msgid "Account Payment Import"
+msgstr "入金消込インポート"
+
+#. module: account_payment_import_sbt
+#: model_terms:ir.ui.view,arch_db:account_payment_import_sbt.view_account_payment_import
+msgid "Cancel"
+msgstr "取消"
+
+#. module: account_payment_import_sbt
+#: model:ir.model,name:account_payment_import_sbt.model_res_company
+msgid "Companies"
+msgstr "会社"
+
+#. module: account_payment_import_sbt
+#: model:ir.model.fields,field_description:account_payment_import_sbt.field_account_payment_import__create_uid
+msgid "Created by"
+msgstr "作成者"
+
+#. module: account_payment_import_sbt
+#: model:ir.model.fields,field_description:account_payment_import_sbt.field_account_payment_import__create_date
+msgid "Created on"
+msgstr "作成日"
+
+#. module: account_payment_import_sbt
+#: code:addons/account_payment_import_sbt/models/account_payment_import.py:334
+#, python-format
+msgid "Currencies are inconsistent between invoice and journal: %s - %s"
+msgstr "請求書と支払で通貨が一致していません: %s - %s"
+
+#. module: account_payment_import_sbt
+#: model:ir.model,name:account_payment_import_sbt.model_res_currency
+msgid "Currency"
+msgstr "通貨"
+
+#. module: account_payment_import_sbt
+#: model:ir.model.fields,field_description:account_payment_import_sbt.field_account_payment_import__display_name
+msgid "Display Name"
+msgstr "表示名"
+
+#. module: account_payment_import_sbt
+#: model:ir.model.fields,field_description:account_payment_import_sbt.field_account_payment_import__import_file
+msgid "File"
+msgstr "ファイル"
+
+#. module: account_payment_import_sbt
+#: model:ir.model.fields,field_description:account_payment_import_sbt.field_account_payment_import__file_name
+msgid "File Name"
+msgstr "ファイル名"
+
+#. module: account_payment_import_sbt
+#: code:addons/account_payment_import_sbt/models/account_payment_import.py:220
+#, python-format
+msgid "Following columns are missing: \n"
+" %s"
+msgstr "以下の列がCSVファイルに見つかりません: \n"
+" %s"
+
+#. module: account_payment_import_sbt
+#: model_terms:ir.ui.view,arch_db:account_payment_import_sbt.view_account_payment_import
+msgid "Import"
+msgstr "インポート"
+
+#. module: account_payment_import_sbt
+#: model:ir.model.fields,field_description:account_payment_import_sbt.field_account_payment__ip_exchange_rate
+msgid "Import Exchange Rate"
+msgstr "インポート為替レート"
+
+#. module: account_payment_import_sbt
+#: code:addons/account_payment_import_sbt/models/account_payment_import.py:88
+#, python-format
+msgid "Import Result"
+msgstr "インポート結果"
+
+#. module: account_payment_import_sbt
+#: model:ir.model.fields,field_description:account_payment_import_sbt.field_account_payment_import__import_type
+msgid "Import Type"
+msgstr "伝票種類"
+
+#. module: account_payment_import_sbt
+#: model_terms:ir.ui.view,arch_db:account_payment_import_sbt.view_account_payment_search
+msgid "Imported"
+msgstr "インポート"
+
+#. module: account_payment_import_sbt
+#: model:ir.model.fields,field_description:account_payment_import_sbt.field_account_payment__is_imported
+msgid "Imported Payment"
+msgstr "インポート支払"
+
+#. module: account_payment_import_sbt
+#: model:ir.actions.act_window,name:account_payment_import_sbt.action_account_payments
+#: model:ir.model.fields,field_description:account_payment_import_sbt.field_error_log__payment_ids
+#: model_terms:ir.ui.view,arch_db:account_payment_import_sbt.import_error_log_form
+msgid "Imported Payments"
+msgstr "インポート支払"
+
+#. module: account_payment_import_sbt
+#: code:addons/account_payment_import_sbt/models/account_payment_import.py:266
+#, python-format
+msgid "Incorrect date format."
+msgstr "日付形式が正しくありません。"
+
+#. module: account_payment_import_sbt
+#: code:addons/account_payment_import_sbt/models/account_payment_import.py:213
+#, python-format
+msgid "Invalid file!"
+msgstr "無効なファイル!"
+
+#. module: account_payment_import_sbt
+#: model:ir.model,name:account_payment_import_sbt.model_account_invoice
+msgid "Invoice"
+msgstr "請求書"
+
+#. module: account_payment_import_sbt
+#: code:addons/account_payment_import_sbt/models/account_payment.py:33
+#, python-format
+msgid "Invoice %s is still open."
+msgstr "請求書に未消込金額があります。"
+
+#. module: account_payment_import_sbt
+#: model:ir.model.fields,field_description:account_payment_import_sbt.field_error_log_line__invoice_amount
+msgid "Invoice Amount"
+msgstr "請求金額"
+
+#. module: account_payment_import_sbt
+#: model:ir.model.fields,field_description:account_payment_import_sbt.field_error_log_line__invoice_number
+msgid "Invoice Number"
+msgstr "請求書番号"
+
+#. module: account_payment_import_sbt
+#: model:ir.model.fields,field_description:account_payment_import_sbt.field_error_log_line__journal
+msgid "Journal"
+msgstr "決済手段"
+
+#. module: account_payment_import_sbt
+#: code:addons/account_payment_import_sbt/models/account_payment_import.py:344
+#, python-format
+msgid "Journal not found."
+msgstr "決済手段が見つかりません。"
+
+#. module: account_payment_import_sbt
+#: model:ir.model.fields,field_description:account_payment_import_sbt.field_account_payment_import____last_update
+msgid "Last Modified on"
+msgstr "最終更新日"
+
+#. module: account_payment_import_sbt
+#: model:ir.model.fields,field_description:account_payment_import_sbt.field_account_payment_import__write_uid
+msgid "Last Updated by"
+msgstr "最終更新者"
+
+#. module: account_payment_import_sbt
+#: model:ir.model.fields,field_description:account_payment_import_sbt.field_account_payment_import__write_date
+msgid "Last Updated on"
+msgstr "最終更新日"
+
+#. module: account_payment_import_sbt
+#: model:ir.model.fields,field_description:account_payment_import_sbt.field_account_payment__log_id
+#: model:ir.model.fields,field_description:account_payment_import_sbt.field_error_log_line__warning_log_id
+msgid "Log"
+msgstr "ログ"
+
+#. module: account_payment_import_sbt
+#: code:addons/account_payment_import_sbt/models/account_payment_import.py:311
+#, python-format
+msgid "Multiple invoices found %s,"
+msgstr "複数の請求書(％s)が見つかりました。"
+
+#. module: account_payment_import_sbt
+#: code:addons/account_payment_import_sbt/models/account_payment_import.py:307
+#, python-format
+msgid "No open invoice for the order number."
+msgstr "オーダに紐づく未消込の請求書が見つかりません。"
+
+#. module: account_payment_import_sbt
+#: model:ir.model.fields,field_description:account_payment_import_sbt.field_error_log_line__order_number
+msgid "Order Number"
+msgstr "オーダ番号"
+
+#. module: account_payment_import_sbt
+#: code:addons/account_payment_import_sbt/models/account_payment_import.py:304
+#, python-format
+msgid "Order number not found."
+msgstr "オーダが見つかりません。"
+
+#. module: account_payment_import_sbt
+#: code:addons/account_payment_import_sbt/models/account_payment_import.py:272
+#, python-format
+msgid "Partner not found."
+msgstr "顧客/仕入先が見つかりません。"
+
+#. module: account_payment_import_sbt
+#: code:addons/account_payment_import_sbt/models/account_payment_import.py:315
+#, python-format
+msgid "Partners are inconsistent between invoice and payment: %s - %s"
+msgstr "請求書と支払で顧客/仕入先が一致していません: %s - %s"
+
+#. module: account_payment_import_sbt
+#: model:ir.model.fields,field_description:account_payment_import_sbt.field_error_log_line__total_amount
+msgid "Payment Amount"
+msgstr "支払金額"
+
+#. module: account_payment_import_sbt
+#: model:ir.actions.act_window,name:account_payment_import_sbt.open_payment_import_popup
+msgid "Payment CSV File"
+msgstr "入金CSVファイル"
+
+#. module: account_payment_import_sbt
+#: model:ir.ui.menu,name:account_payment_import_sbt.payment_import_menu
+msgid "Payment Data Reconcile"
+msgstr "入金データ消込"
+
+#. module: account_payment_import_sbt
+#: model:ir.ui.menu,name:account_payment_import_sbt.payment_import_wizard_menu
+msgid "Payment Import"
+msgstr "入金CSVファイル"
+
+#. module: account_payment_import_sbt
+#: model:ir.ui.menu,name:account_payment_import_sbt.payment_import_log_menu
+msgid "Payment Import Log"
+msgstr "入金ログ"
+
+#. module: account_payment_import_sbt
+#: model:ir.model,name:account_payment_import_sbt.model_account_payment
+msgid "Payments"
+msgstr "支払"
+
+#. module: account_payment_import_sbt
+#: selection:account.payment.import,import_type:0
+msgid "Purchase"
+msgstr "購買"
+
+#. module: account_payment_import_sbt
+#: selection:account.payment.import,import_type:0
+msgid "Sales"
+msgstr "販売"
+
+#. module: account_payment_import_sbt
+#: model:ir.ui.menu,name:account_payment_import_sbt.menu_imported_account_payment
+msgid "To Processed Imported Payments"
+msgstr "処理中支払"
+
+#. module: account_payment_import_sbt
+#: model:ir.actions.server,name:account_payment_import_sbt.validate_payment_cron_ir_actions_server
+#: model:ir.cron,cron_name:account_payment_import_sbt.validate_payment_cron
+#: model:ir.cron,name:account_payment_import_sbt.validate_payment_cron
+msgid "Validate Draft Payments"
+msgstr "ドラフト支払検証"
+
+#. module: account_payment_import_sbt
+#: model:ir.model.fields,field_description:account_payment_import_sbt.field_error_log__warning_log_line_ids
+msgid "Warning Log Lines"
+msgstr "警告ログ"
+
+#. module: account_payment_import_sbt
+#: model_terms:ir.ui.view,arch_db:account_payment_import_sbt.import_error_log_form
+msgid "Warnings"
+msgstr "警告"
+
+#. module: account_payment_import_sbt
+#: model:ir.model.fields,field_description:account_payment_import_sbt.field_res_company__write_off_account_id
+#: model:ir.model.fields,field_description:account_payment_import_sbt.field_res_config_settings__write_off_account_id
+msgid "Write-Off Account"
+msgstr "償却勘定"
+
+#. module: account_payment_import_sbt
+#: model:ir.model,name:account_payment_import_sbt.model_error_log
+msgid "error.log"
+msgstr ""
+
+#. module: account_payment_import_sbt
+#: model:ir.model,name:account_payment_import_sbt.model_error_log_line
+msgid "error.log.line"
+msgstr ""
+
+#. module: account_payment_import_sbt
+#: code:addons/account_payment_import_sbt/models/account_payment_import.py:34
+msgid "There are records with the same order number: %s"
+msgstr "注文番号が重複したレコードが存在します： %s"

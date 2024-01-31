@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="custom_account_invoice_write_off_journal" model="ir.ui.view">
+        <field name="name">Account Write Off Account</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="account.res_config_settings_view_form" />
+        <field name="arch" type="xml">
+            <xpath
+                expr="//field[@name='currency_exchange_journal_id']"
+                position="after"
+            >
+                <label for="write_off_account_id" class="col-lg-3 o_light_label" />
+                <field name="write_off_account_id" />
+            </xpath>
+        </field>
+    </record>
+</odoo>

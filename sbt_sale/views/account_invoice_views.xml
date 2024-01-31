@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="custom_account_invoice_exchange_rate" model="ir.ui.view">
+        <field name="name">Account Invoice Exchange Rate</field>
+        <field name="model">account.invoice</field>
+        <field name="inherit_id" ref="account.invoice_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='team_id']" position="after">
+                <field name="exchange_rate" required="1" />
+            </xpath>
+        </field>
+    </record>
+    <record id="custom_account_invoice_supplier_exchange_rate" model="ir.ui.view">
+        <field name="name">Account Invoice Supplier Exchange Rate</field>
+        <field name="model">account.invoice</field>
+        <field name="inherit_id" ref="account.invoice_supplier_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='date_due']" position="after">
+                <field name="exchange_rate" required="1" />
+            </xpath>
+        </field>
+    </record>
+</odoo>
