@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <menuitem
+        id="report_account_monthly_report_menu"
+        name="Monthly Report"
+        parent="account.menu_finance_reports"
+        sequence="1"
+    />
+</odoo>
