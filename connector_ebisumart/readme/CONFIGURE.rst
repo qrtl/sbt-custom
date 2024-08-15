@@ -19,3 +19,5 @@ Steps in Odoo:
 * Go to Accounting > Configuration > Journals and select the appropriate journal. 
 * Choose the Ebisumart Payment Type that you will use, such as Credit Card or Payment Slip, to assign journal for imported orders.
 * Set the timezone of the OdooBot user to match the timezone of your Ebisumart shop. This ensures that dates and times are correctly mapped during the synchronization process, avoiding any discrepancies in Odoo.
+
+This module depends on the 'queue_job'. Therefore, please adhere to the configuration steps outlined in this module.
