@@ -115,9 +115,9 @@ class SaleOrder(models.Model):
             'state': 'draft',
             'type': 'in_invoice',
             'purchase_id': po.id,
+            'date_invoice': fields.Date.context_today(self, self.ebisumart_send_date),
         }
         inv = self.env['account.invoice'].create(po_invoice)
-        inv.write({'date_invoice': self.ebisumart_send_date})
         inv.purchase_order_change()
         # Recalculate the invoice lines.
         inv._onchange_invoice_line_ids()
