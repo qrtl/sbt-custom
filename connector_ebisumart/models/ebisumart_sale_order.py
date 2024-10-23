@@ -115,6 +115,7 @@ class SaleOrder(models.Model):
             'state': 'draft',
             'type': 'in_invoice',
             'purchase_id': po.id,
+            'date_invoice': fields.Date.context_today(self, self.ebisumart_send_date),
         }
         inv = self.env['account.invoice'].create(po_invoice)
         inv.purchase_order_change()
@@ -124,6 +125,14 @@ class SaleOrder(models.Model):
         # Force assign scheduled_date
         # TODO put this line after action_confirm()
         self.picking_ids.write({'scheduled_date': self.ebisumart_send_date})
+
+    @api.multi
+    def _prepare_invoice(self):
+        vals = super()._prepare_invoice()
+        date = self.ebisumart_send_date
+        if date:
+            vals['date_invoice'] = fields.Date.context_today(self, date)
+        return vals
 
 
 class EbisumartSaleOrderLine(models.Model):

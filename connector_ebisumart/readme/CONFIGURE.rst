@@ -1,0 +1,35 @@
+To configure this module, you need to set several things in both PrestaShop and Odoo:
+
+Steps in Ebisumart
+
+* Create the Ebisumart Apps.(https://support.ebisumart.com/category/APP/APP_INSTALL.html)
+    * Login to the Ebisumart Developer tool.
+    * Go to the Apps management page.
+    * Create a new Apps. Apps is required to connect with Odoo.
+    * Fill in the following fields and save the Apps.
+        * Apps Code - Code of Apps (Uniquely identify the Apps)
+        * Apps Name - Name of Apps
+        * Redirect URI - URL of the Odoo environment for redirecting from Ebisumart when requesting authorization. After the Odoo URL, please append /ebisumart/auth (e.g. https://odoo.example.com/ebisumart/auth)
+    * You can check the App password by using the 'Show Password' button.
+
+* Need to log in to the ebisumart shop page, so please create an account for the shop page as well
+
+Steps in Odoo:
+
+* Go to Connectors > Ebisumart > Backends.
+* Create a new record to register an Ebisumart backend.
+    * Name - Backend Name
+    * Ebisumart No - The number of Ebisumart
+    * App Code - The code of your application
+    * Password - Password for your application
+    * Root Ebisumart URL - Specify the root URL for the shop management tool (https://support.ebisumart.com/category/APP/APP_INSTALL.html)
+    * Ebisumart Access URL - Specify the URL for API access (https://support.ebisumart.com/category/APPDA/APPDA.html#APPDA_ACCESS_URL)
+    * Redirect URI - Specify the URL of the Odoo environment for redirecting from Ebisumart when requesting authorization (e.g., odoo_web_url/ebisumart/auth)
+    * Sale Partner - Assign the partner that will be used as the customer for imported sale orders.
+    * Coupon Product - Assign the coupon product to be used in the order line when the Ebisumart order includes a coupon
+* After filling in the details, click the Authorization button. This will initiate the OAuth process to obtain the token information needed for secure API communication with Ebisumart.
+* Go to Accounting > Configuration > Journals and select the appropriate journal. 
+* Choose the Ebisumart Payment Type that you will use, such as Credit Card or Payment Slip, to assign journal for imported orders.
+* Set the timezone of the OdooBot user to match the timezone of your Ebisumart shop. This ensures that dates and times are correctly mapped during the synchronization process, avoiding any discrepancies in Odoo.
+
+This module depends on the 'queue_job'. Therefore, please adhere to the configuration steps outlined in this module.
