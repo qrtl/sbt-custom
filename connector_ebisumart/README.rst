@@ -42,6 +42,18 @@ To configure this module, you need to set several things in both PrestaShop and 
 
 Steps in Ebisumart
 
+* Create the Ebisumart Apps.(https://support.ebisumart.com/category/APP/APP_INSTALL.html)
+    * Login to the Ebisumart Developer tool.
+    * Go to the Apps management page.
+    * Create a new Apps. Apps is required to connect with Odoo.
+    * Fill in the following fields and save the Apps.
+        * Apps Code - Code of Apps (Uniquely identify the Apps)
+        * Apps Name - Name of Apps
+        * Redirect URI - URL of the Odoo environment for redirecting from Ebisumart when requesting authorization. After the Odoo URL, please append /ebisumart/auth (e.g. https://odoo.example.com/ebisumart/auth)
+    * You can check the App password by using the 'Show Password' button.
+
+* Need to log in to the ebisumart shop page, so please create an account for the shop page as well
+
 Steps in Odoo:
 
 * Go to Connectors > Ebisumart > Backends.
