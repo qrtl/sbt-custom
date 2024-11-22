@@ -154,24 +154,36 @@ class EbisumartBackend(models.Model):
 
     @api.multi
     def _import_orders(self, model):
+        description = (
+            f'JOB: Prepare the import of records modified in Ebisumart '
+            f'({self.env[model]._description})'
+        )
         for backend in self:
-            self.env[model].with_delay().import_batch(
+            self.env[model].with_delay(description=description).import_batch(
                 backend,
                 filters=None
             )
 
     @api.multi
     def _import_partners(self, model):
+        description = (
+            f'JOB: Prepare the import of records modified in Ebisumart '
+            f'({self.env[model]._description})'
+        )
         for backend in self:
-            self.env[model].with_delay().import_batch(
+            self.env[model].with_delay(description=description).import_batch(
                 backend,
                 filters=None
             )
 
     @api.multi
     def _import_products(self, model):
+        description = (
+            f'JOB: Prepare the import of records modified in Ebisumart '
+            f'({self.env[model]._description})'
+        )
         for backend in self:
-            self.env[model].with_delay().import_batch(
+            self.env[model].with_delay(description=description).import_batch(
                 backend,
                 filters=None
             )
