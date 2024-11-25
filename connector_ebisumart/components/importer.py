@@ -319,5 +319,10 @@ class DelayedBatchImporter(AbstractComponent):
 
     def _import_record(self, external_id, job_options=None, **kwargs):
         """ Delay the import of the records"""
-        delayable = self.model.with_delay(**job_options or {})
+        job_options = job_options or {}
+        job_options["description"] = (
+            f"JOB: Import an Ebisumart record "
+            f"({self.model._description}: {external_id})"
+        )
+        delayable = self.model.with_delay(**job_options)
         delayable.import_record(self.backend_record, external_id, **kwargs)

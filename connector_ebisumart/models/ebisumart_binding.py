@@ -27,7 +27,11 @@ class EbisumartBinding(models.AbstractModel):
 
     @api.model
     def import_batch(self, backend, filters=None):
-        """ Prepare the import of records modified on Ebisumart """
+        """Prepare the import of records created/updated in Ebisumart.
+        This will create a queue job to fetch the list of created/updated records
+        from Ebisumart, and subsequently prepare individual queue jobs for
+        each record to be imported.
+        """
         if filters is None:
             filters = {}
         with backend.work_on(self._name) as work:
@@ -36,7 +40,9 @@ class EbisumartBinding(models.AbstractModel):
 
     @api.model
     def import_record(self, backend, external_id, force=False):
-        """ Import a Ebisumart record """
+        """Import an Ebisumart record.
+        This will import the Ebisumart record into Odoo when its queue job is run.
+        """
         with backend.work_on(self._name) as work:
             importer = work.component(usage='record.importer')
             return importer.run(external_id, force=force)

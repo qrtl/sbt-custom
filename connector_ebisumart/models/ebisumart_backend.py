@@ -152,43 +152,34 @@ class EbisumartBackend(models.Model):
         return add_checkpoint(self.env, record._name, record.id,
                               self._name, self.id)
 
-    @api.multi
-    def _import_orders(self, model):
-        for backend in self:
-            self.env[model].with_delay().import_batch(
-                backend,
-                filters=None
-            )
+    def _get_job_description(self, model):
+        return (
+            f"JOB: Prepare the import of records modified in Ebisumart "
+            f"({self.env[model]._description})"
+        )
 
     @api.multi
-    def _import_partners(self, model):
+    def _import_ebisumart_records(self, model):
+        description = self._get_job_description(model)
         for backend in self:
-            self.env[model].with_delay().import_batch(
-                backend,
-                filters=None
-            )
-
-    @api.multi
-    def _import_products(self, model):
-        for backend in self:
-            self.env[model].with_delay().import_batch(
+            self.env[model].with_delay(description=description).import_batch(
                 backend,
                 filters=None
             )
 
     @api.multi
     def import_products(self):
-        self._import_products('ebisumart.product.product')
+        self._import_ebisumart_records('ebisumart.product.product')
         return True
 
     @api.multi
     def import_sale_orders(self):
-        self._import_orders('ebisumart.sale.order')
+        self._import_ebisumart_records('ebisumart.sale.order')
         return True
 
     @api.multi
     def import_partners(self):
-        self._import_partners('ebisumart.res.partner')
+        self._import_ebisumart_records('ebisumart.res.partner')
         return True
 
     @api.model
