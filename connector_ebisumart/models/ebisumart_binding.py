@@ -27,8 +27,8 @@ class EbisumartBinding(models.AbstractModel):
 
     @api.model
     def import_batch(self, backend, filters=None):
-        """ Prepare the import of records modified in Ebisumart.
-        This will create a queue job to fetch the list of modified records
+        """Prepare the import of records created/updated in Ebisumart.
+        This will create a queue job to fetch the list of created/updated records
         from Ebisumart, and subsequently prepare individual queue jobs for
         each record to be imported.
         """
