@@ -28,6 +28,11 @@ This module does the following:
 .. contents::
    :local:
 
+Configuration
+=============
+
+- To export reports in the user's time zone, please have the res.user set their own time zone. If nothing is set, UTC will be used.
+
 Bug Tracker
 ===========
 
