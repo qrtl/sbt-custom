@@ -157,7 +157,7 @@ class EbisumartBackend(models.Model):
             f"JOB: Prepare the import of records modified in Ebisumart "
             f"({self.env[model]._description})"
         )
-    
+
     @api.multi
     def _import_orders(self, model):
         description = self._get_job_description(model)
